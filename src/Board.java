@@ -86,9 +86,11 @@ public class Board {
         }
     }
 
-    private void createEmptyRow(StringBuilder board, Pawn col) {
+    private void createEmptyRow(StringBuilder board, Pawn[] row) {
         final String emptyField =  "⬛";
-        board.append(emptyField);
+        for(int i=0; i< row.length; i++){
+            board.append(emptyField);
+        }
     }
 
     private StringBuilder createHeader() {
