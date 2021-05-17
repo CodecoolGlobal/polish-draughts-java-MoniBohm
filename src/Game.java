@@ -8,6 +8,7 @@ public class Game {
     }
 
     public void start() {
+        System.out.println(board.toString());
     }
 
     private void playRound() {

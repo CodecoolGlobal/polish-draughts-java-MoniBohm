@@ -3,15 +3,14 @@ import java.awt.Color;
 public class Pawn {
     private boolean isCrowned;
     private Coordinates position;
+    private final Color color;
 
-    public Pawn(Color color, Coordinates coords){
-
+    public Pawn(Color color){
+        this.color = color;
     }
 
     public Color getColor() {
-        //String color = pawn.color
-        //return color
-        return null;
+        return this.color;
     }
 
     private class Coordinates {
