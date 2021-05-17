@@ -13,13 +13,28 @@ public class Game {
 
     private void playRound() {
         //moving
+        /*
+        * inputFromUser
+        * tryToMakeMove()
+        * checkForWinner
+        *clearBoard
+        * PrintBoard
+        * */
     }
 
-    private void tryToMakeMove() {
+    private boolean tryToMakeMove() {
+//         * validateInput -- board.movePawn() --> isValidInput()
+        return false;
 
     }
 
     private boolean checkForWinner() {
+        return false;
+    }
+
+    public boolean isValidInput() {
+        //visszatettem, mert megint végig mentem
+        // a lelkifolyamaton h megértsem a feladatot és rájöttem hogy igazatok van :D
         return false;
     }
 }

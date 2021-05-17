@@ -41,8 +41,12 @@ public class Board {
         //removes pawn at the given index
     }
 
-    public void movePawn(int[] indexes) {
+    public boolean movePawn(int[] indexes) {
         //moves pawn at the given index
+        /*
+        * pawn.isValidInput()
+        * */
+        return false;
     }
 
     public String toString() {
@@ -57,7 +61,6 @@ public class Board {
         }
         return board.toString();
     }
-
 
     private void rowToString(StringBuilder board, Pawn[] row) {
         final String newLine = "\n";
