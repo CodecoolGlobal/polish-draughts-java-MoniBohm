@@ -1,17 +1,9 @@
 public class Board {
 
-    public Pawn[][] fields;
+    private Pawn[][] fields;
 
     public Board(int n) {
-        //between 10 and 20, place pawns
-    }
-
-    public void setFields() {
-        //null or pawn
-    }
-
-    public Pawn[][] getFields() {
-        //return board;
+        //between 10 and 20, place pawn
     }
 
     public void removePawn(int[] indexes) {
@@ -22,8 +14,8 @@ public class Board {
         //moves pawn at the given index
     }
 
-    public String changeToString() {
+    public String toString() {
         //mark rows as numbers and columns as letters
-        return "hello";
+        return null;
     }
 }

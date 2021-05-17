@@ -1,42 +1,23 @@
 public class Game {
-    int boardSize;
-
+    private int boardSize;
+    private Board board;
 
     public Game (int boardSize) {
         this.boardSize = boardSize;
-    }
-
-    public Pawn[][] initBoard() {
-        Board board = new Board(boardSize);
-        return board.fields;
-    }
-
-    public void play() {
-        //initBoard();
-        //start();
-        //playRound();
-        //checkForWinner();
-        //tryToMakeMove();
-        //isValidInput();
+        this.board = new Board(boardSize);
     }
 
     public void start() {
+    }
+
+    private void playRound() {
+    }
+
+    private void tryToMakeMove() {
 
     }
 
-    public int playRound() {
-        return 1;
-    }
-
-    public boolean checkForWinner() {
-        return false;
-    }
-
-    public void tryToMakeMove() {
-
-    }
-
-    public boolean isValidInput() {
+    private boolean checkForWinner() {
         return false;
     }
 }

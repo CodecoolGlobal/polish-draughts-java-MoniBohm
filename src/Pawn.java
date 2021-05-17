@@ -1,10 +1,17 @@
-public class Pawn {
-    boolean isCrowned;
+import java.awt.Color;
 
-    public String getColor() {
+public class Pawn {
+    private boolean isCrowned;
+    private Coordinates position;
+
+    public Pawn(Color color, Coordinates coords){
+
+    }
+
+    public Color getColor() {
         //String color = pawn.color
         //return color
-        return "hello";
+        return null;
     }
 
     private class Coordinates {
