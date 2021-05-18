@@ -42,32 +42,14 @@ public class Pawn {
         return this.isCrowned;
     }
 
-    public int[] isCouldmultipleJumps(int[] coordinates, int n){
-        return new int[]{0,0};
-    }
 
-
-    private int[] checkCoordinates(int[] coordinates, int n){
+    public int[] isCouldmultipleJumps(int[] coordinates,boolean isCrowned, int n){
         int row = coordinates[0];
         int col = coordinates[1];
-        int leftNext;
-        if(row ==0 && col == n -1)
-        {return topRightPosition(row, col)};
-        if(row ==n-1 && col == n-1){bottomRightPosition};
-        if(row ==0 && col == 0){bottomLeftPosition};
-        if(row ==n-1 && col == 0){bottomLeftPosition};
-        if(col == 0){leftColPosition};
-        if(col == n-1){rightColPosition};
-        if(row == 0){bottomRowPoisiton};
-        if(row == n-1){topRowPoisiton};
-//        notSpecialPosition();
-        return new int[]{0,0};
+        CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, n);
+        int[] nextCoordinate = doNewCoord.doNewCoord();
+        return nextCoordinate;
     }
-
-    private boolean topRightPosition(int row, int col) {
-        return false;
-    }
-
 
     public boolean isValidMove(Pawn pawn, int[] coordinates) {
         return false;

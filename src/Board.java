@@ -1,4 +1,5 @@
-import java.awt.*;
+import java.awt.Color;
+import java.util.concurrent.TimeUnit;
 
 
 public class Board {
@@ -44,7 +45,7 @@ public class Board {
         fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
-    public void movePawn(Pawn pawn, int[] coordinates) {
+    public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
         //collect new data
         Color color = pawn.getColor();
         boolean isCrowned = pawn.getIsCrowned(pawn);
@@ -56,21 +57,28 @@ public class Board {
         fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
 
-    private void enemyCaptured(Pawn pawn, int[] coordinates){
+    private void enemyCaptured(Pawn pawn, int[] coordinates) throws InterruptedException {
+        //if possible enemy captures
         int row = coordinates[0];
         int col = coordinates[1];
+        boolean isCrowned = pawn.getIsCrowned(pawn);
         if(fields[row][col] != null){
             Pawn enemyPawn = fields[row][col];
             removePawn(enemyPawn);
         }
-        int[] nextCoordinate = pawn.isCouldmultipleJumps(coordinates, n);
+        int[] nextCoordinate = pawn.isCouldmultipleJumps(coordinates,isCrowned, n);
         if(nextCoordinate.length > 0){
+            //if possible automaticMoveisComing
             doAutomaticJump(pawn, nextCoordinate);
         }
     }
 
-    private void doAutomaticJump(Pawn pawn,int[] coordinates){
+    private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
         movePawn(pawn, coordinates);
+        //new boardPrint with delay --ebben még nem vagyok biztos hogy így lesz teljesen :D
+        System.out.println("Automatic jump!");
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println(toString());
     }
 
     public String toString() {
@@ -107,7 +115,7 @@ public class Board {
 //        final String blackField = CYAN_BOLD + "⚫";
 //        final String whiteField = YELLOW_BOLD + "⚫";
 
-        final String emptyField = "_ ";
+        final String emptyField = "__ ";
         final String blackField = "B ";
         final String whiteField = "W ";
 
@@ -128,8 +136,17 @@ public class Board {
         int width = fields[0].length;
         StringBuilder header = new StringBuilder("  ");
         for (int i = 1; i <= width; i++) {
-            String element = "\u001B[35m" + i + "_";
+            if(i>9)
+            {
+                String element = "\u001B[35m" + i + "|";
+                header.append(element);
+            }
+            else
+            {
+            String element = "\u001B[35m" + i + "|";
             header.append(element);
+            }
+
         }
         return header.append("\n");
     }
