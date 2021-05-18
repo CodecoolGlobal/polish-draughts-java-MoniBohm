@@ -8,9 +8,16 @@ public class Game {
     private Board board;
 
 
-    public String getBoardSizeInput() {
+    public String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
-        System.out.print("Enter board size: ");
+        switch(inputType) {
+            case "boardSizeInput":
+                System.out.print("Enter board size: ");
+                break;
+            case "startPositionInput":
+                System.out.print("Enter start position coordinate: ");
+                break;
+        }
         String input = keyboardInput.nextLine();
         return input;
     }
@@ -30,9 +37,9 @@ public class Game {
         int boardSizeInput = 0;
         boolean validInput = false;
         while (!validInput) {
-            String input = getBoardSizeInput();
+            String input = getInput("boardSizeInput");
             while (!isBoardSizeInputNumber(input)) {
-                input = getBoardSizeInput();
+                input = getInput("boardSizeInput");
             }
             boardSizeInput = Integer.parseInt(input);
             validInput = isBoardSizeInputValid(boardSizeInput);
@@ -63,6 +70,13 @@ public class Game {
         return false;
     }
 
+    private boolean isValidCoordinateFormat(String position) {
+        Pattern pattern = Pattern.compile("[a-zA-Z]\\d+");
+        Matcher matcher = pattern.matcher(position);
+        boolean result = matcher.matches();
+        return result;
+    }
+
     private boolean isValidInput(String position) {
         // check if user's input has correct format
         //Márta
@@ -76,9 +90,18 @@ public class Game {
         return false;
     }
 
-    private boolean isFieldOnBoard(String position) {
-        // check if provided field is within board range
-        return false;
+    private int[] convertInputToIntArr(String position) {
+        int coordinatesArr[] = new int[2];
+        int firstCoordinate = position.charAt(0) - 'A';
+        int secondCoordinate = Integer.parseInt(position.substring(1)) - 1;
+        coordinatesArr[0] = firstCoordinate;
+        coordinatesArr[1] = secondCoordinate;
+        return coordinatesArr;
+    }
+
+    public boolean isFieldOnBoard(String position) {
+        int coordinates[] = convertInputToIntArr(position);
+        return (coordinates[0] < boardSize && coordinates[1] < boardSize);
     }
 
     private boolean isCorrectPawn(int player, String position){
