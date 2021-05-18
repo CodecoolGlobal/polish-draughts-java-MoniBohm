@@ -59,7 +59,14 @@ public class Board {
 
     private void enemyCaptured(Pawn pawn, int[] coordinates){
 
+
     }
+
+
+    private boolean multipleSuccessiveJumps(int[] coordinates){
+
+    }
+
 
     public String toString() {
         StringBuilder board = new StringBuilder();
@@ -115,7 +122,7 @@ public class Board {
         int width = fields[0].length;
         StringBuilder header = new StringBuilder("  ");
         for (int i = 1; i <= width; i++) {
-            String element = "\u001B[35m" + i + "";
+            String element = "\u001B[35m" + i + "_";
             header.append(element);
         }
         return header.append("\n");
