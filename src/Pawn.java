@@ -5,17 +5,32 @@ public class Pawn {
     private Coordinates position;
     private final Color color;
 
-    public Pawn(Color color){
+    public Pawn(Color color, Coordinates position, boolean isCrowned){
         this.color = color;
+        this.position = position;
+        this.isCrowned = isCrowned;
     }
 
     public Color getColor() {
         return this.color;
     }
 
-    private class Coordinates {
+    public static class Coordinates {
         int x;
         int y;
+
+        Coordinates(int row, int col){
+            this.x = row;
+            this.y = col;
+        }
+    }
+//
+//    public Coordinates getCoordinates() {
+//        return position;
+//    }
+
+    public int getRow() {
+        return position.x;
     }
 
     public int getCoordinates() {
@@ -23,11 +38,15 @@ public class Pawn {
     }
 
     public void setCoordinates() {
-
+        //Móni
     }
 
-    private boolean isValidMove(int[] coordinates) {
+    public boolean isValidMove(int[] coordinates) {
         return false;
+
+//        Pawn contains a method that validates given move
+//        (checks whether it's according to the game's rules)
+//        before making it.
     }
 
 

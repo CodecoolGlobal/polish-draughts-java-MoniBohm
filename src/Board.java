@@ -18,7 +18,8 @@ public class Board {
         Color color = determinePawnColor(row, n);
 
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
-            fields[row][col] = new Pawn(color);
+            Pawn.Coordinates position = new Pawn.Coordinates(row, col);
+            fields[row][col] = new Pawn(color, position, false);
         } else {
             fields[row][col] = null;
         }
@@ -37,10 +38,12 @@ public class Board {
 
     public void removePawn(int[] indexes) {
         //removes pawn at the given index
+        //Móni
     }
 
     public void movePawn(int[] indexes) {
         //moves pawn at the given index
+        //Móni
     }
 
     public String toString() {
@@ -72,5 +75,9 @@ public class Board {
             String color = (col.getColor() == Color.black ? blackField : whiteField);
             board.append(color);
         }
+    }
+
+    public Pawn getPawn(int row, int col){
+        return fields[row][col];
     }
 }
