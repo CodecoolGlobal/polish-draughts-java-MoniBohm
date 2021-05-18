@@ -50,16 +50,26 @@ public class Board {
         Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
         //remove pawn oldPosition
         removePawn(pawn);
+        enemyCaptured(pawn, coordinates);
         //put new Pawn
         fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
 
 
+
+    private void enemyCaptured(Pawn pawn, int[] coordinates){
+
+    }
+
     public String toString() {
         StringBuilder board = new StringBuilder();
-
-        for (Pawn[] row : fields) {
-            rowToString(board, row);
+        StringBuilder header = createHeader();
+        board.append(header);
+        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        for (int i = 0; i < fields.length; i++) {
+            String letter = "\u001B[35m" + alphabet[i] + " ";
+            board.append(letter);
+            rowToString(board, fields[i]);
         }
         return board.toString();
     }
@@ -101,6 +111,15 @@ public class Board {
 //        final String emptyField =  "⬛";
 //        board.append(emptyField);
 //    }
+    private StringBuilder createHeader() {
+        int width = fields[0].length;
+        StringBuilder header = new StringBuilder("  ");
+        for (int i = 1; i <= width; i++) {
+            String element = "\u001B[35m" + i + "";
+            header.append(element);
+        }
+        return header.append("\n");
+    }
 
     public Pawn getPawn(int row, int col){
         return fields[row][col];
