@@ -33,15 +33,15 @@ public class Pawn {
         return position.x;
     }
 
-    public int getCoordinates() {
-        return 1;
+    public Coordinates getCoordinates(Pawn pawn) {
+        return pawn.position;
     }
 
     public void setCoordinates() {
         //Móni
     }
 
-    public boolean isValidMove(int[] coordinates) {
+    public boolean isValidMove(Pawn pawn, int[] coordinates) {
         return false;
 
 //        Pawn contains a method that validates given move
