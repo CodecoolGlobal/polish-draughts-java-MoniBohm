@@ -37,6 +37,11 @@ public class Pawn {
         return new int[] {pawn.position.x, pawn.position.y};
     }
 
+
+    public boolean getIsCrowned(Pawn pawn) {
+        return this.isCrowned;
+    }
+
     public void setCoordinates() {
         //Móni
     }

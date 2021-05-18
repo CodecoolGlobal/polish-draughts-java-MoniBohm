@@ -43,10 +43,17 @@ public class Board {
     }
 
     public void movePawn(Pawn pawn, int[] coordinates) {
+        //collect new data
+        Color color = pawn.getColor();
+        boolean isCrowned = pawn.getIsCrowned(pawn);
+        Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
+        //remove pawn oldPosition
         int[] removeIndex = pawn.getCoordinates(pawn);
         removePawn(removeIndex);
-
+        //put new Pawn
+        fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
+
 
     public String toString() {
         StringBuilder board = new StringBuilder();
