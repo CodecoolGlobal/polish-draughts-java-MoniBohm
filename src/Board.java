@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Scanner;
 
 public class Board {
 
@@ -13,6 +14,7 @@ public class Board {
             }
         }
     }
+
 
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
