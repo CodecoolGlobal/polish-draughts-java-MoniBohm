@@ -58,19 +58,31 @@ public class Board {
     }
 
     private void enemyCaptured(Pawn pawn, int[] coordinates) throws InterruptedException {
-        //if possible enemy captures
         int row = coordinates[0];
         int col = coordinates[1];
-        boolean isCrowned = pawn.getIsCrowned(pawn);
         if(fields[row][col] != null){
             Pawn enemyPawn = fields[row][col];
             removePawn(enemyPawn);
         }
+        multipleJumps(pawn, coordinates);
+    }
+
+    private void multipleJumps(Pawn pawn, int[] coordinates) throws InterruptedException {
         int[] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
-        if(nextCoordinate.length > 0){
-            //if possible automaticMoveisComing
-            doAutomaticJump(pawn, nextCoordinate);
+        int numberOfOptions = nextCoordinate.length;
+        switch (numberOfOptions){
+            case 0:
+                break;
+            case 2:
+                doAutomaticJump(pawn, nextCoordinate);
+                break;
+            default:
+                chooseFromTheseCoordinates(nextCoordinate, pawn);
+                break;
         }
+    }
+
+    private void chooseFromTheseCoordinates(int[] nextCoordinate, Pawn pawn) {
     }
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
