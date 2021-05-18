@@ -63,16 +63,55 @@ public class Game {
         return false;
     }
 
-    private boolean isValidInput(String position) {
-        // check if user's input has correct format
-        //Márta
-        // két input - két switch
-        //Switch():
-        //case1: isPositionValid();
-        //case2: isFieldOnBoard();
-        //case3: isCorrectPawn();
-        //case4: isCorrectPawn();
+    // play Round
+//    int player = 1;
+//    String startPosition = userInput();
+//    while(!isValidStartPosition(player, startPosition)) {
+//        String startPosition = userInput();
+//    }
+//    String endPosition = userInput();
+//    while(!isValidEndPosition(player, endPosition)) {
+//        String endPosition = userInput();
+//    }
+//    make move(startPosition, endPosition)
 
+
+    private boolean isValidInput(String position) {
+        if (!isValidFormat(String position)) {
+            System.out.println("Please make sure format is like A1");
+            return false;
+        } else if (!isFieldOnBoard(String position)) {
+            System.out.println("Chosen field is out of board");
+            return false;
+        }
+        return true;
+    }
+
+
+    private boolean isValidStartPosition(int player, String position) {
+        if (isValidInput(position)) {
+            if(isCorrectPawn(player, position)) {
+                if (!canPawnMove(String position)){
+                    System.out.println("Chosen pawn has no possible moves");
+                    return false;
+                }
+            }
+        }
+     return false;
+
+        // return isValidFormat(position) && isCorrectPawn(player, position) && canPawnMove(String position)
+    }
+
+    private boolean isValidEndPosition(String position) {
+        return isValidInput(position) && isChosenFieldEmpty(position);
+    }
+
+    private boolean isChosenFieldEmpty(String position) {
+        
+    }
+
+    private boolean isValidFormat(String position) {
+        // check if provided field is within board range
         return false;
     }
 
@@ -85,12 +124,23 @@ public class Game {
         // check if pawn belongs to correct player (1: white, 2: black)
         int[] coordinates = changeInputToIntArr(position);
         Pawn chosenPawn = board.getPawn(coordinates[0], coordinates[1]);
-        if(chosenPawn != null){
+        if(chosenPawn == null){
+            System.out.println("Chosen field is empty");
+            return false;
+        } else {
             Color pawnColor = chosenPawn.getColor();
-            return (pawnColor == Color.white && player == 1) || (pawnColor == Color.black && player == 2);
+            if((pawnColor == Color.white && player == 1) || (pawnColor == Color.black && player == 2)) {
+                return true;
+            } else {
+                System.out.println("Chosen pawn is incorrect");
+                return false;
+            }
         }
-        return false;
     }
+
+    private boolean canPawnMove(String position){
+        return true;
+        }
 
     private int[] changeInputToIntArr(String position){
         return null;

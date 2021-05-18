@@ -41,7 +41,8 @@ public class Pawn {
         //Móni
     }
 
-    public boolean isValidMove(int[] coordinates) {
+    public boolean isValidMove(Pawn pawn, int[] endPosition) {
+        pawn.position
         return false;
 
 //        Pawn contains a method that validates given move
