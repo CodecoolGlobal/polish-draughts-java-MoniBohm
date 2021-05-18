@@ -4,8 +4,10 @@ import java.awt.*;
 public class Board {
 
     private Pawn[][] fields;
+    private int n;
 
     public Board(int n) {
+        this.n = n;
         //between 10 and 20, place pawn
         fields = new Pawn[n][n];
         for (int row = 0; row < n; row++) {
@@ -14,7 +16,6 @@ public class Board {
             }
         }
     }
-
 
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
@@ -55,18 +56,22 @@ public class Board {
         fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
 
-
-
     private void enemyCaptured(Pawn pawn, int[] coordinates){
-
-
+        int row = coordinates[0];
+        int col = coordinates[1];
+        if(fields[row][col] != null){
+            Pawn enemyPawn = fields[row][col];
+            removePawn(enemyPawn);
+        }
+        int[] nextCoordinate = pawn.isCouldmultipleJumps(coordinates, n);
+        if(nextCoordinate.length > 0){
+            doAutomaticJump(pawn, nextCoordinate);
+        }
     }
 
-
-    private boolean multipleSuccessiveJumps(int[] coordinates){
-
+    private void doAutomaticJump(Pawn pawn,int[] coordinates){
+        movePawn(pawn, coordinates);
     }
-
 
     public String toString() {
         StringBuilder board = new StringBuilder();
@@ -118,6 +123,7 @@ public class Board {
 //        final String emptyField =  "⬛";
 //        board.append(emptyField);
 //    }
+
     private StringBuilder createHeader() {
         int width = fields[0].length;
         StringBuilder header = new StringBuilder("  ");
