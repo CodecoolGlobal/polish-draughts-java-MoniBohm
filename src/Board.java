@@ -38,8 +38,9 @@ public class Board {
         return color;
     }
 
-    public void removePawn(int[] coordinates) {
-        fields[coordinates[0]][coordinates[1]] = null;
+    public void removePawn(Pawn pawn) {
+        int[] removeIndex = pawn.getCoordinates(pawn);
+        fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
     public void movePawn(Pawn pawn, int[] coordinates) {
@@ -48,8 +49,7 @@ public class Board {
         boolean isCrowned = pawn.getIsCrowned(pawn);
         Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
         //remove pawn oldPosition
-        int[] removeIndex = pawn.getCoordinates(pawn);
-        removePawn(removeIndex);
+        removePawn(pawn);
         //put new Pawn
         fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
