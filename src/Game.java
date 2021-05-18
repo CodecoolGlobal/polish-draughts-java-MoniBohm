@@ -63,17 +63,18 @@ public class Game {
         return false;
     }
 
-    // play Round
-//    int player = 1;
-//    String startPosition = userInput();
-//    while(!isValidStartPosition(player, startPosition)) {
+//    play Round:
+//        int player = 1;
 //        String startPosition = userInput();
-//    }
-//    String endPosition = userInput();
-//    while(!isValidEndPosition(endPosition)) {
+//        while(!isValidStartPosition(player, startPosition)) {
+//            String startPosition = userInput();
+//        }
 //        String endPosition = userInput();
-//    }
-//    make move(startPosition, endPosition)
+//        while(!isValidEndPosition(endPosition)) {
+//            String endPosition = userInput();
+//            //check for rules
+//        }
+//        make move(startPosition, endPosition)
 
 
     private boolean isValidInput(String position) {
@@ -89,17 +90,7 @@ public class Game {
 
 
     private boolean isValidStartPosition(int player, String position) {
-        if (isValidInput(position)) {
-            if (isCorrectPawn(player, position)) {
-                if (!canPawnMove(position)) {
-                    System.out.println("Chosen pawn has no possible moves");
-                    return false;
-                }
-            }
-        }
-        return false;
-
-        // return isValidFormat(position) && isCorrectPawn(player, position) && canPawnMove(String position)
+        return isValidFormat(position) && isCorrectPawn(player, position);
     }
 
     private boolean isValidEndPosition(String position) {
@@ -143,10 +134,6 @@ public class Game {
                 return false;
             }
         }
-    }
-
-    private boolean canPawnMove(String position) {
-        return true;
     }
 
     private int[] changeInputToIntArr(String position) {
