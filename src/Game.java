@@ -41,7 +41,7 @@ public class Game {
         return boardSizeInput;
     }
 
-    public Game () {
+    public Game() {
         this.boardSize = getBoardSize();
         this.board = new Board(boardSize);
     }
@@ -82,18 +82,18 @@ public class Game {
         return false;
     }
 
-    private boolean isCorrectPawn(int player, String position){
+    private boolean isCorrectPawn(int player, String position) {
         // check if pawn belongs to correct player (1: white, 2: black)
         int[] coordinates = changeInputToIntArr(position);
         Pawn chosenPawn = board.getPawn(coordinates[0], coordinates[1]);
-        if(chosenPawn != null){
+        if (chosenPawn != null) {
             Color pawnColor = chosenPawn.getColor();
             return (pawnColor == Color.white && player == 1) || (pawnColor == Color.black && player == 2);
         }
         return false;
     }
 
-    private int[] changeInputToIntArr(String position){
+    private int[] changeInputToIntArr(String position) {
         return null;
     }
 
@@ -102,20 +102,21 @@ public class Game {
     }
 
     private boolean isEndPositionValid(int player, String position) {
-        if(isValidInput(position) && isFieldOnBoard(position)) {
+        if (isValidInput(position) && isFieldOnBoard(position)) {
             //check if player can make requested move
         }
         return false;
     }
 
-    public void automaticMoveManage(int[] nextCoordinate){
+    public void automaticMoveManage(int[] nextCoordinate) {
         System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
         Scanner keyboardInput = new Scanner(System.in);
         String input = keyboardInput.nextLine();
         //inputátalakítás
-        while(Arrays.asList(nextCoordinate).contains(input)){
+        while (Arrays.asList(nextCoordinate).contains(input)) {
             System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
-    }
+        }
         //újvalidálás
 //        board.movePawn();
+    }
 }
