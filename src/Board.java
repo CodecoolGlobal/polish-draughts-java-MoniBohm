@@ -1,5 +1,5 @@
 import java.awt.*;
-import java.util.Scanner;
+
 
 public class Board {
 
@@ -38,14 +38,14 @@ public class Board {
         return color;
     }
 
-    public void removePawn(int[] indexes) {
-        //removes pawn at the given index
-        //Móni
+    public void removePawn(int[] coordinates) {
+        fields[coordinates[0]][coordinates[1]] = null;
     }
 
     public void movePawn(Pawn pawn, int[] coordinates) {
-        int removeIndex = pawn.position;
-        //Móni
+        int[] removeIndex = pawn.getCoordinates(pawn);
+        removePawn(removeIndex);
+
     }
 
     public String toString() {

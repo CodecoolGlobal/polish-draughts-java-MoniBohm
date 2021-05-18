@@ -33,8 +33,8 @@ public class Pawn {
         return position.x;
     }
 
-    public Coordinates getCoordinates(Pawn pawn) {
-        return pawn.position;
+    public int[] getCoordinates(Pawn pawn) {
+        return new int[] {pawn.position.x, pawn.position.y};
     }
 
     public void setCoordinates() {
