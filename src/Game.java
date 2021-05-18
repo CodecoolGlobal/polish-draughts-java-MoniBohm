@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -106,4 +107,15 @@ public class Game {
         }
         return false;
     }
+
+    public void automaticMoveManage(int[] nextCoordinate){
+        System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
+        Scanner keyboardInput = new Scanner(System.in);
+        String input = keyboardInput.nextLine();
+        //inputátalakítás
+        while(Arrays.asList(nextCoordinate).contains(input)){
+            System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
+    }
+        //újvalidálás
+//        board.movePawn();
 }

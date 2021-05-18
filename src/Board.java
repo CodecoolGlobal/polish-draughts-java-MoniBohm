@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
@@ -83,6 +85,8 @@ public class Board {
     }
 
     private void chooseFromTheseCoordinates(int[] nextCoordinate, Pawn pawn) {
+        Game game = new Game();
+        game.automaticMoveManage(nextCoordinate);
     }
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
