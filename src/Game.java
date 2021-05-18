@@ -57,14 +57,16 @@ public class Game {
 
     public void start() {
         System.out.println(board.toString());
+        // only for testing purposes
         while(!checkForWinner()){
-            playRound();
+            playRound(1);
+            System.out.println(board.toString());
+            playRound(2);
             System.out.println(board.toString());
         }
     }
 
-    private void playRound() {
-        int player = 2;
+    private void playRound(int player) {
         String startPosition = getInput("startPositionInput");
         while(!isValidStartPosition(player, startPosition)) {
             startPosition = getInput("startPositionInput");

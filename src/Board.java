@@ -54,14 +54,6 @@ public class Board {
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
         }
-        //collect new data
-//        Color color = pawn.getColor();
-//        boolean isCrowned = pawn.getIsCrowned(pawn);
-//        Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
-//        //remove pawn oldPosition
-//        removePawn(pawn);
-//        //put new Pawn
-//        fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
 
 

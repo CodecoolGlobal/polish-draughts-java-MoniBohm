@@ -50,15 +50,13 @@ public class Pawn {
         if (!this.getIsCrowned()) {
             int startRow = this.position.x;
             int startCol = this.position.y;
-
             int endRow = endPosition[0];
             int endCol = endPosition[1];
 
             // check if pawn wants to move on a field next to it
             boolean isNextField = (this.getColor() == Color.white && startRow - endRow == 1) || (this.getColor() == Color.black && startRow - endRow == -1);
             // check if pawn wants to move by 2 fields
-            boolean isFurtherField = (this.getColor() == Color.white && startRow - endRow == 2) || (this.getColor() == Color.black && startRow - endRow == -2);
-
+            boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
             if (isNextField) {
                 if (Math.abs(startCol - endCol) == 1) {
                     return true;
