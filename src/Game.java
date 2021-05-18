@@ -17,6 +17,9 @@ public class Game {
             case "startPositionInput":
                 System.out.print("Enter start position coordinate: ");
                 break;
+            case "endPositionInput":
+                System.out.print("Enter end position coordinate: ");
+                break;
         }
         String input = keyboardInput.nextLine();
         return input;
@@ -54,15 +57,30 @@ public class Game {
 
     public void start() {
         System.out.println(board.toString());
+        while(!checkForWinner()){
+            playRound();
+            System.out.println(board.toString());
+        }
     }
 
     private void playRound() {
-        //tryToMakeMove
+        int player = 2;
+        String startPosition = getInput("startPositionInput");
+        while(!isValidStartPosition(player, startPosition)) {
+            startPosition = getInput("startPositionInput");
+        }
+        String endPosition = getInput("endPositionInput");
+        while(!isValidEndPosition(endPosition)) {
+            endPosition = getInput("endPositionInput");
+        }
+        tryToMakeMove(startPosition, endPosition);
     }
 
-    private void tryToMakeMove() {
-        //ezirányítja a validációt
-        //isvalidInput();
+    private void tryToMakeMove(String startPosition, String endPosition) {
+        int[] startCoor = convertInputToIntArr(startPosition);
+        int[] endCoor = convertInputToIntArr(endPosition);
+        Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
+        board.movePawn(pawn, endCoor);
     }
 
     private boolean checkForWinner() {
@@ -77,22 +95,9 @@ public class Game {
         return result;
     }
 
-//    play Round:
-//        int player = 1;
-//        String startPosition = userInput();
-//        while(!isValidStartPosition(player, startPosition)) {
-//            String startPosition = userInput();
-//        }
-//        String endPosition = userInput();
-//        while(!isValidEndPosition(endPosition)) {
-//            String endPosition = userInput();
-//            //check for rules
-//        }
-//        make move(startPosition, endPosition)
-
 
     private boolean isValidInput(String position) {
-        if (!isValidFormat(position)) {
+        if (!isValidCoordinateFormat(position)) {
             System.out.println("Please make sure format is like A1");
             return false;
         } else if (!isFieldOnBoard(position)) {
@@ -104,7 +109,7 @@ public class Game {
 
 
     private boolean isValidStartPosition(int player, String position) {
-        return isValidFormat(position) && isCorrectPawn(player, position);
+        return isValidInput(position) && isCorrectPawn(player, position);
     }
 
     private boolean isValidEndPosition(String position) {
@@ -112,7 +117,7 @@ public class Game {
     }
 
     private boolean isChosenFieldEmpty(String position) {
-        int[] coordinates = changeInputToIntArr(position);
+        int[] coordinates = convertInputToIntArr(position);
         Pawn chosenField = board.getPawn(coordinates[0], coordinates[1]);
         if(chosenField == null) {
             return true;
@@ -122,10 +127,6 @@ public class Game {
         }
     }
 
-    private boolean isValidFormat(String position) {
-        // check if provided field is within board range
-        return false;
-    }
 
     private int[] convertInputToIntArr(String position) {
         int coordinatesArr[] = new int[2];
@@ -143,7 +144,7 @@ public class Game {
 
     private boolean isCorrectPawn(int player, String position) {
         // check if pawn belongs to correct player (1: white, 2: black)
-        int[] coordinates = changeInputToIntArr(position);
+        int[] coordinates = convertInputToIntArr(position);
         Pawn chosenPawn = board.getPawn(coordinates[0], coordinates[1]);
         if (chosenPawn == null) {
             System.out.println("Chosen field is empty");
@@ -159,18 +160,4 @@ public class Game {
         }
     }
 
-    private int[] changeInputToIntArr(String position){
-        return null;
-    }
-
-    private boolean isStartPositionValid(int player, String position) {
-        return isValidInput(position) && isFieldOnBoard(position) && isCorrectPawn(player, position);
-    }
-
-    private boolean isEndPositionValid(int player, String position) {
-        if(isValidInput(position) && isFieldOnBoard(position)) {
-            //check if player can make requested move
-        }
-        return false;
-    }
 }
