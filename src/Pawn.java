@@ -43,9 +43,10 @@ public class Pawn {
     }
 
 
-    public int[] isCouldmultipleJumps(int[] coordinates,boolean isCrowned, int n){
+    public int[] isCouldmultipleJumps(Pawn[][] board, int[] coordinates, int n){
         int row = coordinates[0];
         int col = coordinates[1];
+        boolean isCrowned = getIsCrowned(board[row][col]);
         CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, n);
         int[] nextCoordinate = doNewCoord.doNewCoord();
         return nextCoordinate;

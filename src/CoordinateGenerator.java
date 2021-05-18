@@ -7,7 +7,6 @@ public class CoordinateGenerator {
     public CoordinateGenerator (int row, int col, boolean isCrowned, int n) {
         this.row = row;
         this.col = col;
-        this.isCrowned = isCrowned;
         this.n = n;
     }
 
@@ -24,55 +23,56 @@ public class CoordinateGenerator {
     }
 
     private int[] topRightPosition() {
-        -1+1
-        return new int[]{0,0};
+        if(isCrowned){
+            return new int[]{row-1,col+1};
+        }
+        return new int[]{};
     }
 
     private int[] bottomRightPosition() {
-        +1+1
-        return new int[]{0,0};
+        return new int[]{row-1,col-1};
     }
 
     private int[] topLeftPosition() {
-        +1+1
-        return new int[]{0,0};
+        if(isCrowned){
+            return new int[]{row+1,col+1};
+        }
+        return new int[]{};
     }
 
     private int[] bottomLeftPosition() {
-        +1+1
-        return new int[]{0,0};
+        return new int[]{row+1,col-1};
     }
 
     private int[] leftColPosition() {
-        +1-1
-                -1 +1
-        return new int[]{0,0};
+        if(isCrowned){
+            return new int[]{row-1,col+1};
+        }
+        return new int[]{row+1,col-1};
     }
 
     private int[] rightColPosition() {
-        -1-1
-                -1, +1
-        return new int[]{0,0};
+        if(isCrowned){
+            return new int[]{row-1,col+1};
+        }
+        return new int[]{row-1,col-1};
     }
 
     private int[] bottomRowPoisiton() {
-        -1-1
-                -1, +1
-        return new int[]{0,0};
+        return new int[]{row+1,col+1,row-1,col-1};
     }
 
     private int[] topRowPoisiton() {
-//        -1-1
-//         -1, +1(isCrowned)
-        return new int[]{0,0};
+        if(isCrowned){
+            return new int[]{row+1,col+1,row-1,col-1};
+        }
+        return new int[]{};
     }
 
     private int[] notSpecialPosition() {
-//        -1-1
-//        +1 -1
-//        -1+1(isCrowned)
-//        +1+1(isCrowned)
-        return new int[]{0,0};
+        if (isCrowned) {
+            return new int[]{row - 1, col - 1, row + 1, col - 1, row+1, col+1, row-1, col-1};
+        }
+        return new int[]{row - 1, col - 1,row + 1, col - 1};
     }
-
 }

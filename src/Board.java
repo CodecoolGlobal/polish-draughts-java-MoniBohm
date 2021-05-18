@@ -66,7 +66,7 @@ public class Board {
             Pawn enemyPawn = fields[row][col];
             removePawn(enemyPawn);
         }
-        int[] nextCoordinate = pawn.isCouldmultipleJumps(coordinates,isCrowned, n);
+        int[] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
         if(nextCoordinate.length > 0){
             //if possible automaticMoveisComing
             doAutomaticJump(pawn, nextCoordinate);
