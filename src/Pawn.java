@@ -33,16 +33,20 @@ public class Pawn {
         return position.x;
     }
 
-    public int getCoordinates() {
-        return 1;
+    public int[] getCoordinates(Pawn pawn) {
+        return new int[] {pawn.position.x, pawn.position.y};
+    }
+
+
+    public boolean getIsCrowned(Pawn pawn) {
+        return this.isCrowned;
     }
 
     public void setCoordinates() {
         //Móni
     }
 
-    public boolean isValidMove(Pawn pawn, int[] endPosition) {
-        pawn.position
+    public boolean isValidMove(Pawn pawn, int[] coordinates) {
         return false;
 
 //        Pawn contains a method that validates given move

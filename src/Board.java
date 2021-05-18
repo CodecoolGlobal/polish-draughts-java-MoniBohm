@@ -1,5 +1,5 @@
 import java.awt.*;
-import java.util.Scanner;
+
 
 public class Board {
 
@@ -38,15 +38,22 @@ public class Board {
         return color;
     }
 
-    public void removePawn(int[] indexes) {
-        //removes pawn at the given index
-        //Móni
+    public void removePawn(Pawn pawn) {
+        int[] removeIndex = pawn.getCoordinates(pawn);
+        fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
-    public void movePawn(int[] indexes) {
-        //moves pawn at the given index
-        //Móni
+    public void movePawn(Pawn pawn, int[] coordinates) {
+        //collect new data
+        Color color = pawn.getColor();
+        boolean isCrowned = pawn.getIsCrowned(pawn);
+        Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
+        //remove pawn oldPosition
+        removePawn(pawn);
+        //put new Pawn
+        fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
     }
+
 
     public String toString() {
         StringBuilder board = new StringBuilder();
@@ -67,6 +74,17 @@ public class Board {
     }
 
     private void colToString(StringBuilder board, Pawn col) {
+        //színes tábla
+//        String CYAN_BOLD = "\033[1;36m";   // CYAN
+//        String YELLOW_BOLD = "\033[1;33m"; // YELLOW
+//        String WHITE = "\033[0;107m";   // WHITE
+//        String WHITE_BACKGROUND_BRIGHT = "\\e[1;30m";   // GRAY
+//
+//
+//        final String emptyField = "\u001b[0m" + "⬛";
+//        final String blackField = CYAN_BOLD + "⚫";
+//        final String whiteField = YELLOW_BOLD + "⚫";
+
         final String emptyField = "_ ";
         final String blackField = "B ";
         final String whiteField = "W ";
@@ -78,6 +96,11 @@ public class Board {
             board.append(color);
         }
     }
+
+//    private void createEmptyRow(StringBuilder board, Pawn col) {
+//        final String emptyField =  "⬛";
+//        board.append(emptyField);
+//    }
 
     public Pawn getPawn(int row, int col){
         return fields[row][col];
