@@ -59,7 +59,7 @@ public class Game {
     public void start() throws InterruptedException {
         System.out.println(board.toString());
         // only for testing purposes
-        while(!checkForWinner()){
+        while(checkForDominantWinner() == null){
             playRound(1);
             System.out.println(board.toString());
             playRound(2);
@@ -86,9 +86,58 @@ public class Game {
         board.movePawn(pawn, endCoor);
     }
 
-    private boolean checkForWinner() {
-        //Norbi
-        return false;
+
+    public boolean checkForDrawWithKings() {
+        int pawnCount = 0;
+        int blackKingCount = 0;
+        int whiteKingCount = 0;
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                Pawn currentPawn = board.getPawn(row, col);
+                if (currentPawn != null) {
+                    if (currentPawn.getColor() == Color.black) {
+                        if (currentPawn.getIsCrowned()) {
+                            blackKingCount++;
+                        }
+                        else {
+                            pawnCount++;
+                        }
+                    }
+                    else if (currentPawn.getColor() == Color.white) {
+                        if (currentPawn.getIsCrowned()) {
+                            whiteKingCount++;
+                        }
+                        else {
+                            pawnCount++;
+                        }
+                    }
+                }
+            }
+        }
+        return (pawnCount == 0 && blackKingCount == 1 && whiteKingCount == 1);
+    }
+
+    private String checkForDominantWinner() {
+        Color[] colorsOfPawns = new Color[2];
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                Pawn currentPawn = board.getPawn(row, col);
+                if (currentPawn != null) {
+                    if (currentPawn.getColor() == Color.black) {
+                        colorsOfPawns[0] = Color.black;
+                    } else if (currentPawn.getColor() == Color.white) {
+                        colorsOfPawns[1] = Color.white;
+                    }
+                }
+            }
+        }
+        if (colorsOfPawns[0] == Color.black && colorsOfPawns[1] == null) {
+            return "Black";
+        }
+        else if (colorsOfPawns[0] == null && colorsOfPawns[1] == Color.white) {
+            return "White";
+        }
+        return null;
     }
 
     private boolean isValidCoordinateFormat(String position) {
