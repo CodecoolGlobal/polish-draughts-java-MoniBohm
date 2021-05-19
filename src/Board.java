@@ -91,21 +91,21 @@ public class Board {
         }
     }
 
-    private void multipleJumps(Pawn pawn, int[] coordinates) throws InterruptedException {
-        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
-        System.out.println(Arrays.deepToString(nextCoordinate));
-//        int optinalMove = nextCoordinate.length;
-//        switch (optinalMove){
-//            case 0:
-//                break;
-//            case 2:
-//                doAutomaticJump(pawn, nextCoordinate);
-//                break;
-//            default:
+    private void multipleJumps(Pawn pawn, int[] endPosition) throws InterruptedException {
+        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition, n);
+        Pawn pawnOnEndPosition = fields[endPosition[0]][endPosition[1]];
+        int optinalMove = nextCoordinate[0].length;
+        switch (optinalMove){
+            case 0:
+                break;
+            case 2:
+                doAutomaticJump(pawnOnEndPosition, nextCoordinate[0]);
+                break;
+            default:
 //                chooseFromTheseCoordinates(nextCoordinate, pawn);
-//                break;
-//
-//        }
+                break;
+
+        }
     }
 
     private void chooseFromTheseCoordinates(int[] nextCoordinate, Pawn pawn) {
@@ -118,7 +118,6 @@ public class Board {
         //new boardPrint with delay --ebben még nem vagyok biztos hogy így lesz teljesen :D
         System.out.println("Automatic jump!");
         TimeUnit.SECONDS.sleep(1);
-        System.out.println(toString());
     }
 
     public String toString() {
