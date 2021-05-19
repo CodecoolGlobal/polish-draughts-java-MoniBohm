@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -59,7 +60,7 @@ public class Game {
     public void start() throws InterruptedException {
         System.out.println(board.toString());
         // only for testing purposes
-        while(checkForDominantWinner() == null){
+        while(checkForDominantWinner() != null){
             playRound(1);
             System.out.println(board.toString());
             playRound(2);
@@ -116,6 +117,102 @@ public class Game {
         }
         return (pawnCount == 0 && blackKingCount == 1 && whiteKingCount == 1);
     }
+
+
+    public boolean checkIfFieldIsOutOfBoard(int row, int col) {
+        return (row > (boardSize-1) || row < 0 || col > (boardSize-1) || col < 0);
+    }
+
+    private int[][] generateFieldDistances(Pawn currentPawn) {
+        int[][] fieldDistances = new int[4][2];
+        if (currentPawn.getColor() == Color.black) {
+            fieldDistances[0][0] = 1;
+            fieldDistances[0][1] = 1;
+            fieldDistances[1][0] = 1;
+            fieldDistances[1][1] = -1;
+            fieldDistances[2][0] = -1;
+            fieldDistances[2][1] = -1;
+            fieldDistances[3][0] = -1;
+            fieldDistances[3][1] = 1;
+        }
+        else if (currentPawn.getColor() == Color.white) {
+            fieldDistances[0][0] = -1;
+            fieldDistances[0][1] = -1;
+            fieldDistances[1][0] = -1;
+            fieldDistances[1][1] = 1;
+            fieldDistances[2][0] = 1;
+            fieldDistances[2][1] = 1;
+            fieldDistances[3][0] = 1;
+            fieldDistances[3][1] = -1;
+        }
+        return fieldDistances;
+    }
+
+    private boolean areThereAnyPossibleMove(int row, int col, Pawn currentPawn) {
+        boolean arePiecesBlocked = true;
+        int[][] fieldDistances = generateFieldDistances(currentPawn);
+        for (int i = 0; i < 2; i++) {
+            if (!checkIfFieldIsOutOfBoard(row + fieldDistances[i][0], col + fieldDistances[i][1])) {
+                if (board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) == null) {
+                    arePiecesBlocked = false;
+                }
+                else if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
+                    if (currentPawn.getColor() != board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]).getColor()) {
+                        if (!checkIfFieldIsOutOfBoard(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1]*2))) {
+                            if (board.getPawn(row + (fieldDistances[i][0]*2), col + (fieldDistances[i][1] * 2)) == null) {
+                                arePiecesBlocked = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 2; i <= 3; i++) {
+            if (!checkIfFieldIsOutOfBoard(row + fieldDistances[i][0], col + fieldDistances[i][1])) {
+                if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
+                    if (currentPawn.getColor() != board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]).getColor()) {
+                        if (!checkIfFieldIsOutOfBoard(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1] * 2))) {
+                            if (board.getPawn(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1] * 2)) == null) {
+                                arePiecesBlocked = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return arePiecesBlocked;
+    }
+
+
+
+
+    public String checkForTacticalWinner() {
+        boolean areBlackPiecesBlocked = true;
+        boolean areWhitePiecesBlocked = true;
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                if (areBlackPiecesBlocked || areWhitePiecesBlocked) {
+                    Pawn currentPawn = board.getPawn(row, col);
+                    if (currentPawn != null) {
+                        if (currentPawn.getColor() == Color.black) {
+                            areBlackPiecesBlocked = areThereAnyPossibleMove(row, col, currentPawn);
+                        }
+                        else if (currentPawn.getColor() == Color.white) {
+                            areWhitePiecesBlocked = areThereAnyPossibleMove(row, col, currentPawn);
+                        }
+                    }
+                }
+            }
+        }
+        if (areBlackPiecesBlocked && !areWhitePiecesBlocked) {
+            return "White";
+        }
+        else if (!areBlackPiecesBlocked && areWhitePiecesBlocked) {
+            return "Black";
+        }
+        return null;
+    }
+
 
     private String checkForDominantWinner() {
         Color[] colorsOfPawns = new Color[2];
