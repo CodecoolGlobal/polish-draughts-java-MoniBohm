@@ -15,7 +15,6 @@ public class Board {
         }
     }
 
-
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
 
@@ -58,53 +57,75 @@ public class Board {
 
 
     public String toString() {
+        final String newLine = "\n";
         StringBuilder board = new StringBuilder();
-
-        for (Pawn[] row : fields) {
-            rowToString(board, row);
+        StringBuilder header = createHeader();
+        board.append(header);
+        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        for (int i = 0; i < fields.length; i++) {
+            String letter = "\u001B[35m" + alphabet[i] + " ";
+            board.append(letter);
+            rowToString(board, fields[i], i);
+            board.append(newLine);
         }
         return board.toString();
     }
 
-    private void rowToString(StringBuilder board, Pawn[] row) {
-        final String newLine = "\n";
+    private void rowToString(StringBuilder board, Pawn[] row, int rowNumber) {
 
-        for (Pawn col : row) {
-            colToString(board, col);
+        final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+        final String ANSI_RESET = "\u001B[0m";
+        final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+        final String ANSI_GREEN_BACKGROUND = "\033[42m";
+        final String YELLOW_BACKGROUND = "\033[43m";
+
+        final String emptyBlackField = ANSI_BLACK_BACKGROUND+"    "+ANSI_RESET;
+        final String emptyWhiteField = ANSI_WHITE_BACKGROUND+"    "+ANSI_RESET;
+        final String blackPawnBlackField = ANSI_BLACK_BACKGROUND+" \uD83E\uDD81 "+ANSI_RESET;
+        final String whitePawnBlackField = ANSI_BLACK_BACKGROUND+" \uD83E\uDD92 "+ANSI_RESET;
+        // elephant: final String blackPawnBlackField = ANSI_BLACK_BACKGROUND+" \uD83D\uDC18 "+ANSI_RESET;
+
+        if(rowNumber%2==0){ // even rows
+            for(int i=0; i<row.length; i++){
+                if(i%2==0){ // black fields
+                    if(row[i] == null ){
+                        board.append(emptyBlackField);
+                    } else {
+                        String pawnAndField = (row[i].getColor() == Color.black ? blackPawnBlackField : whitePawnBlackField);
+                        board.append(pawnAndField);
+                    }
+                } else { // white fields
+                        board.append(emptyWhiteField);
+                }
+            }
+        } else { // odd rows
+            for(int i=0; i<row.length; i++){
+                if(i%2!=0){ // black fields
+                    if(row[i] == null ){
+                        board.append(emptyBlackField);
+                    } else {
+                        String pawnAndField = (row[i].getColor() == Color.black ? blackPawnBlackField : whitePawnBlackField);
+                        board.append(pawnAndField);
+                    }
+                } else { // white fields
+                        board.append(emptyWhiteField);
+                    }
+                }
+            }
         }
-        board.append(newLine);
-    }
-
-    private void colToString(StringBuilder board, Pawn col) {
-        //színes tábla
-//        String CYAN_BOLD = "\033[1;36m";   // CYAN
-//        String YELLOW_BOLD = "\033[1;33m"; // YELLOW
-//        String WHITE = "\033[0;107m";   // WHITE
-//        String WHITE_BACKGROUND_BRIGHT = "\\e[1;30m";   // GRAY
-//
-//
-//        final String emptyField = "\u001b[0m" + "⬛";
-//        final String blackField = CYAN_BOLD + "⚫";
-//        final String whiteField = YELLOW_BOLD + "⚫";
-
-        final String emptyField = "_ ";
-        final String blackField = "B ";
-        final String whiteField = "W ";
-
-        if (col == null) {
-            board.append(emptyField);
-        } else {
-            String color = (col.getColor() == Color.black ? blackField : whiteField);
-            board.append(color);
-        }
-    }
-
-//    private void createEmptyRow(StringBuilder board, Pawn col) {
-//        final String emptyField =  "⬛";
-//        board.append(emptyField);
-//    }
 
     public Pawn getPawn(int row, int col){
         return fields[row][col];
     }
+
+    private StringBuilder createHeader() {
+        int width = fields[0].length;
+        StringBuilder header = new StringBuilder("  ");
+        for (int i = 1; i <= width; i++) {
+            String element = (i<10) ? "  "+ "\u001B[35m" + i + " " : " "+ "\u001B[35m" + i + " ";
+            header.append(element);
+        }
+        return header.append("\n");
+    }
 }
+
