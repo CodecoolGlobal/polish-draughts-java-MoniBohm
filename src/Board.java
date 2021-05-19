@@ -61,30 +61,34 @@ public class Board {
     }
 
     private void enemyCaptured(Pawn pawn, int[] endPosition) throws InterruptedException {
-        int row = endPosition[0];
-        int col = endPosition[1];
         int [] startPosition = pawn.getCoordinates();
         if(Math.abs(startPosition[0] - endPosition[0]) == 2){
-            //balra megyünk
             if(startPosition[1] - endPosition[1] == -2){
-                if(startPosition[0] - endPosition[0] == -2){
-                    removePawn(fields[startPosition[0]+1][startPosition[1]+1]);
-                }
-                if(startPosition[0] - endPosition[0] == 2){
-                    removePawn(fields[startPosition[0]-1][startPosition[1]+1]);
-                }
+                moveToLeft(endPosition, startPosition);
             }
-            //jobbra megyünk
             if(startPosition[1] - endPosition[1] == 2){
-                if(startPosition[0] - endPosition[0] == -2){
-                    removePawn(fields[startPosition[0]+1][startPosition[1]-1]);
-                }
-                if(startPosition[0] - endPosition[0] == 2){
-                    removePawn(fields[startPosition[0]-1][startPosition[1]-1]);
-                }
+                movetToRight(endPosition, startPosition);
             }
         }
 //        multipleJumps(pawn, endPosition);
+    }
+
+    private void movetToRight(int[] endPosition, int[] startPosition) {
+        if(startPosition[0] - endPosition[0] == -2){
+            removePawn(fields[startPosition[0]+1][startPosition[1]-1]);
+        }
+        if(startPosition[0] - endPosition[0] == 2){
+            removePawn(fields[startPosition[0]-1][startPosition[1]-1]);
+        }
+    }
+
+    private void moveToLeft(int[] endPosition, int[] startPosition) {
+        if(startPosition[0] - endPosition[0] == -2){
+            removePawn(fields[startPosition[0]+1][startPosition[1]+1]);
+        }
+        if(startPosition[0] - endPosition[0] == 2){
+            removePawn(fields[startPosition[0]-1][startPosition[1]+1]);
+        }
     }
 
     private void multipleJumps(Pawn pawn, int[] coordinates) throws InterruptedException {
