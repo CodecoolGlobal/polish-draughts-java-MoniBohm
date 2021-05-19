@@ -69,24 +69,21 @@ public class Pawn {
     }
 
     private boolean isEnemyInTheMiddle(Pawn[][] board, int startRow, int endRow, int startCol, int endCol) {
+        Pawn middleField = null;
         if (endCol < startCol) {
-            if(endRow > startRow){
-                Pawn middleField = board[startRow + 1][startCol - 1];
-                return middleField != null && middleField.getColor() != this.getColor();
-            } else if(endRow < startRow){
-                Pawn middleField = board[startRow - 1][startCol - 1];
-                return middleField != null && middleField.getColor() != this.getColor();
+            if (endRow > startRow) {
+                middleField = board[startRow + 1][startCol - 1];
+            } else if (endRow < startRow) {
+                middleField = board[startRow - 1][startCol - 1];
             }
         } else if (endCol > startCol) {
-            if(endRow > startRow){
-                Pawn middleField = board[startRow + 1][startCol + 1];
-                return middleField != null && middleField.getColor() != this.getColor();
-            } else if(endRow < startRow){
-                Pawn middleField = board[startRow - 1][startCol + 1];
-                return middleField != null && middleField.getColor() != this.getColor();
+            if (endRow > startRow) {
+                middleField = board[startRow + 1][startCol + 1];
+            } else if (endRow < startRow) {
+                middleField = board[startRow - 1][startCol + 1];
             }
         }
-        return false;
+    return middleField != null && middleField.getColor() != this.getColor();
     }
 }
 
