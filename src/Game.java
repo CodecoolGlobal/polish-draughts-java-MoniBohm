@@ -1,14 +1,17 @@
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.awt.Color;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Game {
     final private int boardSize;
     private final Board board;
-
 
     public String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
@@ -58,17 +61,16 @@ public class Game {
     }
 
     public void start() throws InterruptedException {
-        System.out.println(board.toString());
-        // only for testing purposes
+        int player = -1;
         while(checkForDominantWinner() == null){
-            playRound(1);
             System.out.println(board.toString());
-            playRound(2);
-            System.out.println(board.toString());
+            player = player==1? 2:1;
+            playRound(player);
         }
     }
 
     private void playRound(int player) throws InterruptedException {
+        cheerCurrentPlayer(player);
         String startPosition = getInput("startPositionInput");
         while(!isValidStartPosition(player, startPosition)) {
             startPosition = getInput("startPositionInput");
@@ -87,6 +89,13 @@ public class Game {
         board.movePawn(pawn, endCoor);
     }
 
+    private void cheerCurrentPlayer(int player) {
+        String[] cheerleaders = {"Go %s!!!%n", "Your turn %s!%n", "You can win this %s!%n", "Let's go %s! %n"};
+        String animal = player==1 ? "giraffes":"lions";
+        Random random = new Random();
+        int index = random.nextInt(cheerleaders.length);
+        System.out.printf("\033[0;33m"+cheerleaders[index], animal);
+    }
 
     public boolean checkForDrawWithKings() {
         int pawnCount = 0;
