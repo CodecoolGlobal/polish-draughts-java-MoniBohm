@@ -1,102 +1,55 @@
+import java.awt.*;
+
 public class CoordinateGenerator {
     int row;
     int col;
     boolean isCrowned;
-    int n;
+    int boardSize;
+    int[][] directions = {{-1, 1}, {-1, -1}, {1, 1}, {1, -1}};
+    Pawn[][] board;
 
-    public CoordinateGenerator(int row, int col, boolean isCrowned, int n) {
+    public CoordinateGenerator(int row, int col, boolean isCrowned, Pawn[][] board) {
         this.row = row;
         this.col = col;
-        this.n = n;
+        this.board = board;
+        this.boardSize = board.length;
     }
 
-    public int[] doNewCoord() {
-        if (row == 0 && col == n - 1) {
-            return topRightPosition();
-        }
-        ;
-        if (row == n - 1 && col == n - 1) {
-            return bottomRightPosition();
-        }
-        ;
-        if (row == 0 && col == 0) {
-            return topLeftPosition();
-        }
-        ;
-        if (row == n - 1 && col == 0) {
-            return bottomLeftPosition();
-        }
-        ;
-        if (col == 0) {
-            return leftColPosition();
-        }
-        ;
-        if (col == n - 1) {
-            return rightColPosition();
-        }
-        ;
-        if (row == 0) {
-            return bottomRowPoisiton();
-        }
-        ;
-        if (row == n - 1) {
-            return topRowPoisiton();
-        }
-        ;
-        return notSpecialPosition();
+    public boolean isFieldOnBoard(int newRow, int newCol) {
+        return ((newRow < boardSize && newRow >= 0) && (newCol < boardSize && newCol >= 0));
     }
 
-    private int[] topRightPosition() {
-        if (isCrowned) {
-            return new int[]{row - 1, col + 1};
+    public int[][] getPossibleMoves() {
+        int[][] possibleMoves = {{}};
+        int index = 0;
+        for (int[] direction : directions) {
+            if (isPossibleMove(direction)) {
+                int[] move = {row + 2 * (direction[0]), col + 2 * (direction[1])};
+                possibleMoves[index] = move;
+                index++;
+            }
         }
-        return new int[]{};
+
+        return possibleMoves;
     }
 
-    private int[] bottomRightPosition() {
-        return new int[]{row - 1, col - 1};
-    }
-
-    private int[] topLeftPosition() {
-        if (isCrowned) {
-            return new int[]{row + 1, col + 1};
+    private boolean isPossibleMove(int[] direction) {
+        int nextRow = row + direction[0];
+        int nextCol = col + direction[1];
+        if (isFieldOnBoard(nextRow, nextCol)) {
+            Pawn field = board[nextRow][nextCol];
+            Color playerColor = board[row][col].getColor();
+            if (field != null && field.getColor() != playerColor) {
+                int secondRow = row + 2 * (direction[0]);
+                int secondCol = col + 2 * (direction[1]);
+                if (isFieldOnBoard(secondRow, secondCol)) {
+                    Pawn secondField = board[secondRow][secondCol];
+                    if (secondField == null) {
+                        return true;
+                    }
+                }
+            }
         }
-        return new int[]{};
-    }
-
-    private int[] bottomLeftPosition() {
-        return new int[]{row + 1, col - 1};
-    }
-
-    private int[] leftColPosition() {
-        if (isCrowned) {
-            return new int[]{row - 1, col + 1};
-        }
-        return new int[]{row + 1, col - 1};
-    }
-
-    private int[] rightColPosition() {
-        if (isCrowned) {
-            return new int[]{row - 1, col + 1};
-        }
-        return new int[]{row - 1, col - 1};
-    }
-
-    private int[] bottomRowPoisiton() {
-        return new int[]{row + 1, col + 1, row - 1, col - 1};
-    }
-
-    private int[] topRowPoisiton() {
-        if (isCrowned) {
-            return new int[]{row + 1, col + 1, row - 1, col - 1};
-        }
-        return new int[]{};
-    }
-
-    private int[] notSpecialPosition() {
-        if (isCrowned) {
-            return new int[]{row - 1, col - 1, row + 1, col - 1, row + 1, col + 1, row - 1, col - 1};
-        }
-        return new int[]{row + 1, col + 1, row + 1, col - 1};
+        return false;
     }
 }

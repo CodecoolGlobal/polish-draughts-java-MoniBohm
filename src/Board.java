@@ -53,10 +53,10 @@ public class Board {
             boolean isCrowned = pawn.getIsCrowned();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
             //remove pawn oldPosition
-            enemyCaptured(pawn, coordinates);
             removePawn(pawn);
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
+            enemyCaptured(pawn, coordinates);
         }
     }
 
@@ -69,8 +69,8 @@ public class Board {
             if(startPosition[1] - endPosition[1] == 2){
                 movetToRight(endPosition, startPosition);
             }
+            multipleJumps(pawn, endPosition);
         }
-//        multipleJumps(pawn, endPosition);
     }
 
     private void movetToRight(int[] endPosition, int[] startPosition) {
@@ -92,19 +92,20 @@ public class Board {
     }
 
     private void multipleJumps(Pawn pawn, int[] coordinates) throws InterruptedException {
-        int[] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
-        int optinalMove = nextCoordinate.length;
-        switch (optinalMove){
-            case 0:
-                break;
-            case 2:
-                doAutomaticJump(pawn, nextCoordinate);
-                break;
-            default:
-                chooseFromTheseCoordinates(nextCoordinate, pawn);
-                break;
-
-        }
+        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
+        System.out.println(Arrays.deepToString(nextCoordinate));
+//        int optinalMove = nextCoordinate.length;
+//        switch (optinalMove){
+//            case 0:
+//                break;
+//            case 2:
+//                doAutomaticJump(pawn, nextCoordinate);
+//                break;
+//            default:
+//                chooseFromTheseCoordinates(nextCoordinate, pawn);
+//                break;
+//
+//        }
     }
 
     private void chooseFromTheseCoordinates(int[] nextCoordinate, Pawn pawn) {

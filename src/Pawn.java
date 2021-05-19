@@ -43,33 +43,17 @@ public class Pawn {
     }
 
 
-    public int[] isCouldmultipleJumps(Pawn[][] board, int[] coordinates, int n) {
-        int row = coordinates[0];
-        int col = coordinates[1];
+    public int[][] isCouldmultipleJumps(Pawn[][] board, int[] endPosition, int boardSize) {
+        int row = endPosition[0];
+        int col = endPosition[1];
         boolean isCrowned = getIsCrowned();
-        CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, n);
-        int[] nextCoordinate = doNewCoord.doNewCoord();
-        Color color = getColor();
-        int[] enemyNextCoordinate = isEnemyInNextCoordinate(nextCoordinate, color, board);
+
+        CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, board);
+
+        int[][] enemyNextCoordinate = doNewCoord.getPossibleMoves();
         return enemyNextCoordinate;
     }
 
-
-
-    private int[] isEnemyInNextCoordinate(int[] coordinates, Color color, Pawn[][] fields){
-        int[] enemyInNext = {};
-        if(coordinates.length>0){
-            for(int i=0; i< coordinates.length; i = i + 2){
-                Pawn enemyPawn = fields[i][i + 1];
-                    if(fields[i][i+1] != null && enemyPawn.getColor() != color) {
-                        enemyInNext[i] = i;
-                        enemyInNext[i + 1] = i + 1;
-                    }
-            }
-            return  enemyInNext;
-        }
-        return enemyInNext;
-    }
 
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
         if (!this.getIsCrowned()) {

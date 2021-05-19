@@ -191,7 +191,7 @@ public class Game {
 
     public boolean isFieldOnBoard(String position) {
         int coordinates[] = convertInputToIntArr(position);
-        return (coordinates[0] < boardSize && coordinates[1] < boardSize);
+        return ((coordinates[0] < boardSize && coordinates[0] >= 0) && (coordinates[1] < boardSize && coordinates[1] >= 0));
     }
 
     private boolean isCorrectPawn(int player, String position) {
