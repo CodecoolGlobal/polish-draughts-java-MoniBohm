@@ -11,10 +11,6 @@ public class Pawn {
         this.isCrowned = isCrowned;
     }
 
-    public Color getColor() {
-        return this.color;
-    }
-
     public static class Coordinates {
         int x;
         int y;
@@ -24,65 +20,60 @@ public class Pawn {
             this.y = col;
         }
     }
-//
-//    public Coordinates getCoordinates() {
-//        return position;
-//    }
-
-    public int getRow() {
-        return position.x;
+    //getInformation about Pawn
+    public Color getColor() {
+        return this.color;
     }
 
     public int[] getCoordinates() {
         return new int[]{this.position.x, this.position.y};
     }
 
-
     public boolean getIsCrowned() {
         return this.isCrowned;
     }
-
-
+    //action
     public int[][] isCouldmultipleJumps(Pawn[][] board, int[] endPosition, int boardSize) {
         int row = endPosition[0];
         int col = endPosition[1];
         boolean isCrowned = getIsCrowned();
-
         CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, board);
-
         int[][] enemyNextCoordinate = doNewCoord.getPossibleMoves();
         return enemyNextCoordinate;
     }
-
-
+    // validation
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
         if (!this.getIsCrowned()) {
-            int startRow = this.position.x;
-            int startCol = this.position.y;
-            int endRow = endPosition[0];
-            int endCol = endPosition[1];
+            return notCrownedPawnValidation(endPosition, board);
+        }
+        return false;
+    }
 
-            // check if pawn wants to move on a field next to it
-            boolean isNextField = (this.getColor() == Color.white && startRow - endRow == 1) || (this.getColor() == Color.black && startRow - endRow == -1);
-            // check if pawn wants to move by 2 fields
-            boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
-            if (isNextField) {
-                if (Math.abs(startCol - endCol) == 1) {
-                    return true;
-                }
-            } else if (isFurtherField) {
-                if (endCol < startCol) {
-                    Pawn middleField = board[startRow + 1][startCol - 1];
-                    return middleField != null && middleField.getColor() != this.getColor();
-                } else if (endCol > startCol) {
-                    Pawn middleField = board[startRow + 1][startCol + 1];
-                    return middleField != null && middleField.getColor() != this.getColor();
-                }
-            } else {
-                return false;
+    private boolean notCrownedPawnValidation(int[] endPosition, Pawn[][] board) {
+        int startRow = this.position.x;
+        int startCol = this.position.y;
+        int endRow = endPosition[0];
+        int endCol = endPosition[1];
+        boolean isNextField = (this.getColor() == Color.white && startRow - endRow == 1) || (this.getColor() == Color.black && startRow - endRow == -1);
+        boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
+        if (isNextField) {
+            if (Math.abs(startCol - endCol) == 1) {
+                return true;
             }
-        } else {
-            return false;
+        }
+        if(isFurtherField){
+            return isEnemyAround(board, startRow, startCol, endCol);
+        }
+        return  false;
+    }
+
+    private boolean isEnemyAround(Pawn[][] board, int startRow, int startCol, int endCol) {
+        if (endCol < startCol) {
+            Pawn middleField = board[startRow + 1][startCol - 1];
+            return middleField != null && middleField.getColor() != this.getColor();
+        } else if (endCol > startCol) {
+            Pawn middleField = board[startRow + 1][startCol + 1];
+            return middleField != null && middleField.getColor() != this.getColor();
         }
         return false;
     }

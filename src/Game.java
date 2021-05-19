@@ -147,7 +147,6 @@ public class Game {
         return result;
     }
 
-
     private boolean isValidInput(String position) {
         if (!isValidCoordinateFormat(position)) {
             System.out.println("Please make sure format is like A1");
@@ -158,7 +157,6 @@ public class Game {
         }
         return true;
     }
-
 
     private boolean isValidStartPosition(int player, String position) {
         return isValidInput(position) && isCorrectPawn(player, position);
@@ -213,15 +211,14 @@ public class Game {
     }
 
 
-    public void automaticMoveManage(int[] nextCoordinate) {
-        System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
+    public void automaticMoveManage(int[][] nextCoordinate) {
+        System.out.println("Choose from these coordinates: " + Arrays.deepToString(nextCoordinate));
         Scanner keyboardInput = new Scanner(System.in);
         String input = keyboardInput.nextLine();
-        //inputátalakítás
+        int[] newCoordinate =  convertInputToIntArr(input);
         while (Arrays.asList(nextCoordinate).contains(input)) {
             System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
         }
-        //újvalidálás
-//        board.movePawn();
+
     }
 }
