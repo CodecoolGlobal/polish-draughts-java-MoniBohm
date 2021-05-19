@@ -1,4 +1,4 @@
-import java.awt.*;
+import java.awt.Color;
 
 public class StringGenerator {
     Pawn[][] fields;
@@ -10,7 +10,7 @@ public class StringGenerator {
     final String YELLOW_BACKGROUND = "\033[43m";
 
     final String emptyBlackField = ANSI_BLACK_BACKGROUND + "    " + ANSI_RESET;
-    final String emptyWhiteField = YELLOW_BACKGROUND + "    " + ANSI_RESET;
+    final String emptyWhiteField = ANSI_GREEN_BACKGROUND + "    " + ANSI_RESET;
     final String blackPawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD81 " + ANSI_RESET;
     final String whitePawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD92 " + ANSI_RESET;
 
