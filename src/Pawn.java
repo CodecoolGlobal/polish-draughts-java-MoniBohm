@@ -42,6 +42,7 @@ public class Pawn {
         return enemyNextCoordinate;
     }
     // validation
+
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
         if (!this.getIsCrowned()) {
             return notCrownedPawnValidation(endPosition, board);

@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.awt.Color;
 
 public class Game {
-    private int boardSize;
-    private Board board;
+    final private int boardSize;
+    private final Board board;
 
 
     public String getInput(String inputType) {
@@ -177,7 +177,6 @@ public class Game {
         }
     }
 
-
     private int[] convertInputToIntArr(String position) {
         int coordinatesArr[] = new int[2];
         int firstCoordinate = position.charAt(0) - 'A';
@@ -209,7 +208,6 @@ public class Game {
             }
         }
     }
-
 
     public void automaticMoveManage(int[][] nextCoordinate) {
         System.out.println("Choose from these coordinates: " + Arrays.deepToString(nextCoordinate));
