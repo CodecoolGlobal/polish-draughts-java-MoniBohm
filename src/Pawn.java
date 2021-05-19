@@ -38,7 +38,7 @@ public class Pawn {
     }
 
 
-    public boolean getIsCrowned(Pawn pawn) {
+    public boolean getIsCrowned() {
         return this.isCrowned;
     }
 
