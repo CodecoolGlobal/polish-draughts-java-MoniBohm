@@ -38,7 +38,7 @@ public class Pawn {
     }
 
 
-    public boolean getIsCrowned(Pawn pawn) {
+    public boolean getIsCrowned() {
         return this.isCrowned;
     }
 
@@ -46,7 +46,7 @@ public class Pawn {
     public int[] isCouldmultipleJumps(Pawn[][] board, int[] coordinates, int n){
         int row = coordinates[0];
         int col = coordinates[1];
-        boolean isCrowned = getIsCrowned(board[row][col]);
+        boolean isCrowned = getIsCrowned();
         CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, n);
         int[] nextCoordinate = doNewCoord.doNewCoord();
         return nextCoordinate;
@@ -82,7 +82,7 @@ public class Pawn {
             return false;
         }
     return false;}
-    }
 }
+
 
 

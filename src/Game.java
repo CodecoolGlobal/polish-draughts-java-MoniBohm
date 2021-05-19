@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -55,7 +56,7 @@ public class Game {
         this.board = new Board(boardSize);
     }
 
-    public void start() {
+    public void start() throws InterruptedException {
         System.out.println(board.toString());
         // only for testing purposes
         while(!checkForWinner()){
@@ -66,7 +67,7 @@ public class Game {
         }
     }
 
-    private void playRound(int player) {
+    private void playRound(int player) throws InterruptedException {
         String startPosition = getInput("startPositionInput");
         while(!isValidStartPosition(player, startPosition)) {
             startPosition = getInput("startPositionInput");
@@ -78,7 +79,7 @@ public class Game {
         tryToMakeMove(startPosition, endPosition);
     }
 
-    private void tryToMakeMove(String startPosition, String endPosition) {
+    private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
         int[] startCoor = convertInputToIntArr(startPosition);
         int[] endCoor = convertInputToIntArr(endPosition);
         Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);

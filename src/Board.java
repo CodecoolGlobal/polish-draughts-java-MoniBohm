@@ -52,7 +52,7 @@ public class Board {
         //collect new data
         if (pawn.isValidMove(coordinates, fields)) {
             Color color = pawn.getColor();
-            boolean isCrowned = pawn.getIsCrowned(pawn);
+            boolean isCrowned = pawn.getIsCrowned();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
             //remove pawn oldPosition
             removePawn(pawn);
