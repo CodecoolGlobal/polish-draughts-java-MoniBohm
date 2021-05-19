@@ -42,8 +42,14 @@ public class Pawn {
         return this.isCrowned;
     }
 
-    public void setCoordinates() {
-        //Móni
+
+    public int[] isCouldmultipleJumps(Pawn[][] board, int[] coordinates, int n){
+        int row = coordinates[0];
+        int col = coordinates[1];
+        boolean isCrowned = getIsCrowned();
+        CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, n);
+        int[] nextCoordinate = doNewCoord.doNewCoord();
+        return nextCoordinate;
     }
 
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {

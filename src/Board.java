@@ -1,11 +1,16 @@
-import java.awt.*;
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
 public class Board {
 
     private Pawn[][] fields;
+    private int n;
 
     public Board(int n) {
+        this.n = n;
         //between 10 and 20, place pawn
         fields = new Pawn[n][n];
         for (int row = 0; row < n; row++) {
@@ -14,6 +19,7 @@ public class Board {
             }
         }
     }
+
 
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
@@ -42,19 +48,56 @@ public class Board {
         fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
-    public void movePawn(Pawn pawn, int[] coordinates) {
-        if(pawn.isValidMove(coordinates, fields)){
-            //collect new data
+    public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
+        //collect new data
+        if (pawn.isValidMove(coordinates, fields)) {
             Color color = pawn.getColor();
             boolean isCrowned = pawn.getIsCrowned();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
             //remove pawn oldPosition
             removePawn(pawn);
+            enemyCaptured(pawn, coordinates);
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
         }
     }
+    private void enemyCaptured(Pawn pawn, int[] coordinates) throws InterruptedException {
+        int row = coordinates[0];
+        int col = coordinates[1];
+        if(fields[row][col] != null){
+            Pawn enemyPawn = fields[row][col];
+            removePawn(enemyPawn);
+        }
+        multipleJumps(pawn, coordinates);
+    }
 
+    private void multipleJumps(Pawn pawn, int[] coordinates) throws InterruptedException {
+        int[] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
+        int numberOfOptions = nextCoordinate.length;
+        switch (numberOfOptions){
+            case 0:
+                break;
+            case 2:
+                doAutomaticJump(pawn, nextCoordinate);
+                break;
+            default:
+                chooseFromTheseCoordinates(nextCoordinate, pawn);
+                break;
+        }
+    }
+
+    private void chooseFromTheseCoordinates(int[] nextCoordinate, Pawn pawn) {
+        Game game = new Game();
+        game.automaticMoveManage(nextCoordinate);
+    }
+
+    private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
+        movePawn(pawn, coordinates);
+        //new boardPrint with delay --ebben még nem vagyok biztos hogy így lesz teljesen :D
+        System.out.println("Automatic jump!");
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println(toString());
+    }
 
     public String toString() {
         final String newLine = "\n";
@@ -128,4 +171,3 @@ public class Board {
         return header.append("\n");
     }
 }
-
