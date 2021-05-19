@@ -20,12 +20,11 @@ public class Board {
         }
     }
 
-
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)){
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
-            fields[row][col] = new Pawn(color, position, true);
+            fields[row][col] = new Pawn(color, position, false);
         } else {
             fields[row][col] = null;
         }
@@ -43,7 +42,7 @@ public class Board {
     }
 
     public void removePawn(Pawn pawn) {
-        int[] removeIndex = pawn.getCoordinates(pawn);
+        int[] removeIndex = pawn.getCoordinates();
         fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
@@ -54,26 +53,44 @@ public class Board {
             boolean isCrowned = pawn.getIsCrowned();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
             //remove pawn oldPosition
-            removePawn(pawn);
             enemyCaptured(pawn, coordinates);
+            removePawn(pawn);
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
         }
     }
-    private void enemyCaptured(Pawn pawn, int[] coordinates) throws InterruptedException {
-        int row = coordinates[0];
-        int col = coordinates[1];
-        if(fields[row][col] != null){
-            Pawn enemyPawn = fields[row][col];
-            removePawn(enemyPawn);
+
+    private void enemyCaptured(Pawn pawn, int[] endPosition) throws InterruptedException {
+        int row = endPosition[0];
+        int col = endPosition[1];
+        int [] startPosition = pawn.getCoordinates();
+        if(Math.abs(startPosition[0] - endPosition[0]) == 2){
+            //balra megyünk
+            if(startPosition[1] - endPosition[1] == -2){
+                if(startPosition[0] - endPosition[0] == -2){
+                    removePawn(fields[startPosition[0]+1][startPosition[1]+1]);
+                }
+                if(startPosition[0] - endPosition[0] == 2){
+                    removePawn(fields[startPosition[0]-1][startPosition[1]+1]);
+                }
+            }
+            //jobbra megyünk
+            if(startPosition[1] - endPosition[1] == 2){
+                if(startPosition[0] - endPosition[0] == -2){
+                    removePawn(fields[startPosition[0]+1][startPosition[1]-1]);
+                }
+                if(startPosition[0] - endPosition[0] == 2){
+                    removePawn(fields[startPosition[0]-1][startPosition[1]-1]);
+                }
+            }
         }
-        multipleJumps(pawn, coordinates);
+//        multipleJumps(pawn, endPosition);
     }
 
     private void multipleJumps(Pawn pawn, int[] coordinates) throws InterruptedException {
         int[] nextCoordinate = pawn.isCouldmultipleJumps(fields, coordinates, n);
-        int numberOfOptions = nextCoordinate.length;
-        switch (numberOfOptions){
+        int optinalMove = nextCoordinate.length;
+        switch (optinalMove){
             case 0:
                 break;
             case 2:
@@ -82,6 +99,7 @@ public class Board {
             default:
                 chooseFromTheseCoordinates(nextCoordinate, pawn);
                 break;
+
         }
     }
 

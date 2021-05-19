@@ -33,8 +33,8 @@ public class Pawn {
         return position.x;
     }
 
-    public int[] getCoordinates(Pawn pawn) {
-        return new int[]{pawn.position.x, pawn.position.y};
+    public int[] getCoordinates() {
+        return new int[]{this.position.x, this.position.y};
     }
 
 
@@ -43,13 +43,32 @@ public class Pawn {
     }
 
 
-    public int[] isCouldmultipleJumps(Pawn[][] board, int[] coordinates, int n){
+    public int[] isCouldmultipleJumps(Pawn[][] board, int[] coordinates, int n) {
         int row = coordinates[0];
         int col = coordinates[1];
         boolean isCrowned = getIsCrowned();
         CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, n);
         int[] nextCoordinate = doNewCoord.doNewCoord();
-        return nextCoordinate;
+        Color color = getColor();
+        int[] enemyNextCoordinate = isEnemyInNextCoordinate(nextCoordinate, color, board);
+        return enemyNextCoordinate;
+    }
+
+
+
+    private int[] isEnemyInNextCoordinate(int[] coordinates, Color color, Pawn[][] fields){
+        int[] enemyInNext = {};
+        if(coordinates.length>0){
+            for(int i=0; i< coordinates.length; i = i + 2){
+                Pawn enemyPawn = fields[i][i + 1];
+                    if(fields[i][i+1] != null && enemyPawn.getColor() != color) {
+                        enemyInNext[i] = i;
+                        enemyInNext[i + 1] = i + 1;
+                    }
+            }
+            return  enemyInNext;
+        }
+        return enemyInNext;
     }
 
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
@@ -67,12 +86,12 @@ public class Pawn {
                 if (Math.abs(startCol - endCol) == 1) {
                     return true;
                 }
-            } else if(isFurtherField) {
-                if(endCol < startCol){
-                    Pawn middleField = board[startRow+1][startCol-1];
+            } else if (isFurtherField) {
+                if (endCol < startCol) {
+                    Pawn middleField = board[startRow + 1][startCol - 1];
                     return middleField != null && middleField.getColor() != this.getColor();
-                } else if(endCol > startCol){
-                    Pawn middleField = board[startRow+1][startCol+1];
+                } else if (endCol > startCol) {
+                    Pawn middleField = board[startRow + 1][startCol + 1];
                     return middleField != null && middleField.getColor() != this.getColor();
                 }
             } else {
@@ -81,7 +100,8 @@ public class Pawn {
         } else {
             return false;
         }
-    return false;}
+        return false;
+    }
 }
 
 
