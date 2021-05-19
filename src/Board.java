@@ -19,10 +19,11 @@ public class Board {
         }
     }
 
+
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
+
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
-                //&& (row > n / 2 || row < n / 2 - 1)){
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
             fields[row][col] = new Pawn(color, position, false);
         } else {
@@ -110,7 +111,10 @@ public class Board {
                 chooseFromTheseCoordinates(nextCoordinate, pawn);
                 break;
 
+        for (Pawn col : row) {
+            colToString(board, col);
         }
+        board.append(newLine);
     }
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
