@@ -60,7 +60,8 @@ public class Game {
     public void start() throws InterruptedException {
         System.out.println(board.toString());
         // only for testing purposes
-        while(checkForDominantWinner() != null){
+//        while(checkForDominantWinner() != null){
+        while(true){
             playRound(1);
             System.out.println(board.toString());
             playRound(2);

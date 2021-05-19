@@ -63,18 +63,28 @@ public class Pawn {
             }
         }
         if(isFurtherField){
-            return isEnemyAround(board, startRow, startCol, endCol);
+            return isEnemyInTheMiddle(board, startRow, endRow, startCol, endCol);
         }
         return  false;
     }
 
-    private boolean isEnemyAround(Pawn[][] board, int startRow, int startCol, int endCol) {
+    private boolean isEnemyInTheMiddle(Pawn[][] board, int startRow, int endRow, int startCol, int endCol) {
         if (endCol < startCol) {
-            Pawn middleField = board[startRow + 1][startCol - 1];
-            return middleField != null && middleField.getColor() != this.getColor();
+            if(endRow > startRow){
+                Pawn middleField = board[startRow + 1][startCol - 1];
+                return middleField != null && middleField.getColor() != this.getColor();
+            } else if(endRow < startRow){
+                Pawn middleField = board[startRow - 1][startCol - 1];
+                return middleField != null && middleField.getColor() != this.getColor();
+            }
         } else if (endCol > startCol) {
-            Pawn middleField = board[startRow + 1][startCol + 1];
-            return middleField != null && middleField.getColor() != this.getColor();
+            if(endRow > startRow){
+                Pawn middleField = board[startRow + 1][startCol + 1];
+                return middleField != null && middleField.getColor() != this.getColor();
+            } else if(endRow < startRow){
+                Pawn middleField = board[startRow - 1][startCol + 1];
+                return middleField != null && middleField.getColor() != this.getColor();
+            }
         }
         return false;
     }
