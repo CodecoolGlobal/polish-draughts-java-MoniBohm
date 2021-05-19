@@ -20,6 +20,7 @@ public class Board {
         }
     }
 
+
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
 
@@ -49,16 +50,17 @@ public class Board {
 
     public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
         //collect new data
-        Color color = pawn.getColor();
-        boolean isCrowned = pawn.getIsCrowned(pawn);
-        Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
-        //remove pawn oldPosition
-        removePawn(pawn);
-        enemyCaptured(pawn, coordinates);
-        //put new Pawn
-        fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
+        if (pawn.isValidMove(coordinates, fields)) {
+            Color color = pawn.getColor();
+            boolean isCrowned = pawn.getIsCrowned(pawn);
+            Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
+            //remove pawn oldPosition
+            removePawn(pawn);
+            enemyCaptured(pawn, coordinates);
+            //put new Pawn
+            fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
+        }
     }
-
     private void enemyCaptured(Pawn pawn, int[] coordinates) throws InterruptedException {
         int row = coordinates[0];
         int col = coordinates[1];
@@ -131,7 +133,7 @@ public class Board {
 //        final String blackField = CYAN_BOLD + "⚫";
 //        final String whiteField = YELLOW_BOLD + "⚫";
 
-        final String emptyField = "__ ";
+        final String emptyField = "_ ";
         final String blackField = "B ";
         final String whiteField = "W ";
 
@@ -143,10 +145,6 @@ public class Board {
         }
     }
 
-//    private void createEmptyRow(StringBuilder board, Pawn col) {
-//        final String emptyField =  "⬛";
-//        board.append(emptyField);
-//    }
 
     private StringBuilder createHeader() {
         int width = fields[0].length;
