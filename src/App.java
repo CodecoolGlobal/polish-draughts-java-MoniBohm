@@ -1,8 +1,7 @@
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Game game = new Game();
-        System.out.println(game.isFieldOnBoard("K12"));
         game.start();
-
+        game.savePositions();
     }
 }
