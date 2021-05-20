@@ -1,4 +1,4 @@
-import java.awt.*;
+import java.awt.Color;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -6,27 +6,21 @@ public class CreateValidation {
 
     String endPositon;
     Board board;
-    Pawn[] choosenField;
     int boardSize;
 
-
-
-    public CreateValidation(String endPositon, Board board, int boardSize){
+    public CreateValidation(String endPositon, Board board, int boardSize) {
         this.board = board;
         this.endPositon = endPositon;
         this.boardSize = boardSize;
-    };
-
+    }
 
     public boolean isValidStartPosition(int player, String position) {
         return isValidInput(position) && isCorrectPawn(player, position);
     }
 
     public boolean isValidEndPosition(String position, Pawn choosenField) {
-        choosenField = choosenField;
         return isValidInput(position) && isChosenFieldEmpty(choosenField);
     }
-
 
     private boolean isValidInput(String position) {
         if (!isValidCoordinateFormat(position)) {
@@ -37,9 +31,8 @@ public class CreateValidation {
         return true;
     }
 
-
     private boolean isChosenFieldEmpty(Pawn chosenField) {
-        if(chosenField == null) {
+        if (chosenField == null) {
             return true;
         } else {
             return fieldIsEmpty();
@@ -69,7 +62,7 @@ public class CreateValidation {
     }
 
     public boolean isFieldOnBoard(String position) {
-        int coordinates[] = convertInputToIntArr(position);
+        int[] coordinates = convertInputToIntArr(position);
         return ((coordinates[0] < boardSize && coordinates[0] >= 0) && (coordinates[1] < boardSize && coordinates[1] >= 0));
     }
 
@@ -79,7 +72,7 @@ public class CreateValidation {
     }
 
     private int[] convertInputToIntArr(String position) {
-        int coordinatesArr[] = new int[2];
+        int[] coordinatesArr = new int[2];
         int firstCoordinate = position.charAt(0) - 'A';
         int secondCoordinate = Integer.parseInt(position.substring(1)) - 1;
         coordinatesArr[0] = firstCoordinate;

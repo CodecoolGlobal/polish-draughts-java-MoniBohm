@@ -49,14 +49,12 @@ public class Game {
         return endPosition;
     }
 
-
     public boolean getFullValidationForEndPosition(String endPosition){
         int[] coordinates = convertInputToIntArr(endPosition);
         Pawn targetPawn = board.getPawn(coordinates[0], coordinates[1]);
         CreateValidation getValidation = new CreateValidation(endPosition, board, boardSize);
         return getValidation.isValidEndPosition(endPosition, targetPawn);
     }
-
 
     private String isValidFirstCoordinate(int player) {
         String startPosition;
@@ -97,6 +95,24 @@ public class Game {
         System.out.flush();
     }
 
+    private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
+        int[] startCoor = convertInputToIntArr(startPosition);
+        int[] endCoor = convertInputToIntArr(endPosition);
+        Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
+        board.movePawn(pawn, endCoor);
+    }
+
+    public void automaticMoveManage(int[][] nextCoordinate) {
+        System.out.println("Choose from these coordinates: " + Arrays.deepToString(nextCoordinate));
+        Scanner keyboardInput = new Scanner(System.in);
+        String input = keyboardInput.nextLine();
+        int[] newCoordinate =  convertInputToIntArr(input);
+        while (Arrays.asList(nextCoordinate).contains(input)) {
+            System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
+        }
+
+    }
+
     public int getBoardSize() {
         int boardSizeInput = 0;
         boolean validInput = false;
@@ -121,7 +137,6 @@ public class Game {
         return false;
     }
 
-
     private int[] convertInputToIntArr(String position) {
         int coordinatesArr[] = new int[2];
         int firstCoordinate = position.charAt(0) - 'A';
@@ -129,13 +144,6 @@ public class Game {
         coordinatesArr[0] = firstCoordinate;
         coordinatesArr[1] = secondCoordinate;
         return coordinatesArr;
-    }
-
-    private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
-        int[] startCoor = convertInputToIntArr(startPosition);
-        int[] endCoor = convertInputToIntArr(endPosition);
-        Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
-        board.movePawn(pawn, endCoor);
     }
 
     private void cheerCurrentPlayer(int player) {
@@ -263,7 +271,6 @@ public class Game {
         return null;
     }
 
-
     private String checkForDominantWinner() {
         Color[] colorsOfPawns = new Color[2];
         collectFieldsPawns(colorsOfPawns);
@@ -344,27 +351,4 @@ public class Game {
         positions.add(newPositions);
     }
 
-    private boolean isValidCoordinateFormat(String position) {
-        Pattern pattern = Pattern.compile("[a-zA-Z]\\d+");
-        Matcher matcher = pattern.matcher(position);
-        return matcher.matches();
-    }
-
-
-
-    public void automaticMoveManage(int[][] nextCoordinate) {
-        System.out.println("Choose from these coordinates: " + Arrays.deepToString(nextCoordinate));
-        Scanner keyboardInput = new Scanner(System.in);
-        String input = keyboardInput.nextLine();
-        int[] newCoordinate =  convertInputToIntArr(input);
-        while (Arrays.asList(nextCoordinate).contains(input)) {
-            System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
-        }
-
-    }
-
-
-    public static class Validation {
-
-    }
 }
