@@ -44,9 +44,7 @@ public class CoordinateGenerator {
                 int secondCol = col + 2 * (direction[1]);
                 if (isFieldOnBoard(secondRow, secondCol)) {
                     Pawn secondField = board[secondRow][secondCol];
-                    if (secondField == null) {
-                        return true;
-                    }
+                    return secondField == null;
                 }
             }
         }

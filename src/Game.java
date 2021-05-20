@@ -138,7 +138,7 @@ public class Game {
     }
 
     private int[] convertInputToIntArr(String position) {
-        int coordinatesArr[] = new int[2];
+        int[] coordinatesArr = new int[2];
         int firstCoordinate = position.charAt(0) - 'A';
         int secondCoordinate = Integer.parseInt(position.substring(1)) - 1;
         coordinatesArr[0] = firstCoordinate;
