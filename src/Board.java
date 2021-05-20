@@ -18,7 +18,7 @@ public class Board {
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
 
-        if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
+        if (((col + row) % 2 == 0 ) && (row > n / 2 || row < n / 2 - 1)) {
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
             fields[row][col] = new Pawn(color, position, true);
         } else {
@@ -43,7 +43,7 @@ public class Board {
         return boardString.toString();
     }
 
-    private void removePawn(Pawn pawn) {
+    public void removePawn(Pawn pawn) {
         int[] removeIndex = pawn.getCoordinates();
         fields[removeIndex[0]][removeIndex[1]] = null;
     }
@@ -56,6 +56,9 @@ public class Board {
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
             if(!pawn.getIsCrowned()){
             collectEnemyAround(pawn, coordinates);}
+            else {
+
+            }
         }
 
     private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
