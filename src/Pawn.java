@@ -42,7 +42,6 @@ public class Pawn {
         return enemyNextCoordinate;
     }
     // validation
-
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
         if (!this.getIsCrowned()) {
             return notCrownedPawnValidation(endPosition, board);
@@ -55,7 +54,7 @@ public class Pawn {
         int startCol = this.position.y;
         int endRow = endPosition[0];
         int endCol = endPosition[1];
-        boolean isNextField = (this.getColor() == Color.white && startRow - endRow == 1) || (this.getColor() == Color.black && startRow - endRow == -1);
+        boolean isNextField = (this.color.equals(Color.white ) && startRow - endRow == 1) || (this.color.equals(Color.black) && startRow - endRow == -1);
         boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
         if (isNextField) {
             if (Math.abs(startCol - endCol) == 1) {
@@ -63,20 +62,27 @@ public class Pawn {
             }
         }
         if(isFurtherField){
-            return isEnemyAround(board, startRow, startCol, endCol);
+            return isEnemyInTheMiddle(board, startRow, endRow, startCol, endCol);
         }
         return  false;
     }
 
-    private boolean isEnemyAround(Pawn[][] board, int startRow, int startCol, int endCol) {
+    private boolean isEnemyInTheMiddle(Pawn[][] board, int startRow, int endRow, int startCol, int endCol) {
+        Pawn middleField = null;
         if (endCol < startCol) {
-            Pawn middleField = board[startRow + 1][startCol - 1];
-            return middleField != null && middleField.getColor() != this.getColor();
+            if (endRow > startRow) {
+                middleField = board[startRow + 1][startCol - 1];
+            } else if (endRow < startRow) {
+                middleField = board[startRow - 1][startCol - 1];
+            }
         } else if (endCol > startCol) {
-            Pawn middleField = board[startRow + 1][startCol + 1];
-            return middleField != null && middleField.getColor() != this.getColor();
+            if (endRow > startRow) {
+                middleField = board[startRow + 1][startCol + 1];
+            } else if (endRow < startRow) {
+                middleField = board[startRow - 1][startCol + 1];
+            }
         }
-        return false;
+    return middleField != null && middleField.getColor() != this.getColor();
     }
 }
 

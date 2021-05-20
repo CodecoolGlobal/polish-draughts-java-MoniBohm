@@ -1,17 +1,20 @@
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.awt.Color;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Game {
     List<List> positions = new ArrayList<List>();
     final private int boardSize;
     private final Board board;
-
 
     public String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
@@ -53,17 +56,41 @@ public class Game {
     }
 
     public void start() throws InterruptedException {
-        System.out.println(board.toString());
-        // only for testing purposes
-        while(checkForDominantWinner() != null){
-            playRound(1);
+        int player = -1;
+        while(checkForDominantWinner() == null){
             System.out.println(board.toString());
-            playRound(2);
-            System.out.println(board.toString());
+            player = player==1? 2:1;
+            playRound(player);
         }
     }
 
+    private void playRound(int player) throws InterruptedException {
+        cheerCurrentPlayer(player);
+        String startPosition = getInput("startPositionInput");
+        while(!isValidStartPosition(player, startPosition)) {
+            startPosition = getInput("startPositionInput");
+        }
+        String endPosition = getInput("endPositionInput");
+        while(!isValidEndPosition(endPosition)) {
+            endPosition = getInput("endPositionInput");
+        }
+        tryToMakeMove(startPosition, endPosition);
+    }
 
+    private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
+        int[] startCoor = convertInputToIntArr(startPosition);
+        int[] endCoor = convertInputToIntArr(endPosition);
+        Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
+        board.movePawn(pawn, endCoor);
+    }
+
+    private void cheerCurrentPlayer(int player) {
+        String[] cheerleaders = {"Go %s!!!%n", "Your turn %s!%n", "You can win this %s!%n", "Let's go %s! %n"};
+        String animal = player==1 ? "giraffes":"lions";
+        Random random = new Random();
+        int index = random.nextInt(cheerleaders.length);
+        System.out.printf("\033[0;33m"+cheerleaders[index], animal);
+    }
 
     public boolean checkForDrawWithKings() {
         int pawnCount = 0;
@@ -94,7 +121,6 @@ public class Game {
         }
         return (pawnCount == 0 && blackKingCount == 1 && whiteKingCount == 1);
     }
-
 
     public boolean checkIfFieldIsOutOfBoard(int row, int col) {
         return (row > (boardSize-1) || row < 0 || col > (boardSize-1) || col < 0);
@@ -149,21 +175,6 @@ public class Game {
         return arePiecesBlocked;
     }
 
-
-
-
-    private void playRound(int player) throws InterruptedException {
-        String startPosition = getInput("startPositionInput");
-        while (!isValidStartPosition(player, startPosition)) {
-            startPosition = getInput("startPositionInput");
-        }
-        String endPosition = getInput("endPositionInput");
-        while (!isValidEndPosition(endPosition)) {
-            endPosition = getInput("endPositionInput");
-        }
-        tryToMakeMove(startPosition, endPosition);
-    }
-
     public String checkForTacticalWinner() {
         boolean areBlackPiecesBlocked = true;
         boolean areWhitePiecesBlocked = true;
@@ -177,7 +188,6 @@ public class Game {
                         }
                         else if (currentPawn.getColor() == Color.white) {
                             areWhitePiecesBlocked = areThereAnyPossibleMove(row, col, currentPawn);
-
                         }
                     }
                 }
@@ -192,12 +202,6 @@ public class Game {
         return null;
     }
 
-    private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
-            int[] startCoor = convertInputToIntArr(startPosition);
-            int[] endCoor = convertInputToIntArr(endPosition);
-            Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
-            board.movePawn(pawn, endCoor);
-    }
 
     private String checkForDominantWinner() {
         Color[] colorsOfPawns = new Color[2];
@@ -328,13 +332,11 @@ public class Game {
         if (chosenPawn == null) {
             System.out.println("Chosen field is empty");
             return false;
-        }
-        else {
+        } else {
             Color pawnColor = chosenPawn.getColor();
             if ((pawnColor == Color.white && player == 1) || (pawnColor == Color.black && player == 2)) {
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("Chosen pawn is incorrect");
                 return false;
             }
