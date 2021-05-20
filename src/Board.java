@@ -4,13 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Board {
 
-    private Pawn[][] fields;
-    private int n;
+    private final Pawn[][] fields;
 
-    //board creation
     public Board(int n) {
-        this.n = n;
-        //between 10 and 20, place pawn
         fields = new Pawn[n][n];
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
@@ -23,7 +19,6 @@ public class Board {
         Color color = determinePawnColor(row, n);
 
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
-                //&& (row > n / 2 || row < n / 2 - 1)){
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
             fields[row][col] = new Pawn(color, position, true);
         } else {
@@ -47,20 +42,17 @@ public class Board {
         StringGenerator boardString = new StringGenerator(fields);
         return boardString.toString();
     }
-    // move on board
+
     private void removePawn(Pawn pawn) {
         int[] removeIndex = pawn.getCoordinates();
         fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
     public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
-        //collect new data
             Color color = pawn.getColor();
             boolean isCrowned = pawn.getIsCrowned();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
-            //remove pawn oldPosition
             removePawn(pawn);
-            //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
             if(!pawn.getIsCrowned()){
             collectEnemyAround(pawn, coordinates);}
@@ -73,13 +65,13 @@ public class Board {
                 moveToLeft(endPosition, startPosition);
             }
             if(startPosition[1] - endPosition[1] == 2){
-                movetToRight(endPosition, startPosition);
+                moveToRight(endPosition, startPosition);
             }
             multipleJumps(pawn, endPosition);
         }
     }
 
-    private void movetToRight(int[] endPosition, int[] startPosition) {
+    private void moveToRight(int[] endPosition, int[] startPosition) {
         if(startPosition[0] - endPosition[0] == -2){
             removePawn(fields[startPosition[0]+1][startPosition[1]-1]);
         }
@@ -98,17 +90,17 @@ public class Board {
     }
 
     private void multipleJumps(Pawn pawn, int[] endPosition) throws InterruptedException {
-        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition, n);
+        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition);
         Pawn pawnOnEndPosition = fields[endPosition[0]][endPosition[1]];
-        int optinalMove = nextCoordinate[0].length;
-        switch (optinalMove) {
-            case 0: // no enemy around pawn
+        int optionalMove = nextCoordinate[0].length;
+        switch (optionalMove) {
+            case 0:
                 break;
-            case 2: // 1 enemy around pawn
+            case 2:
                 doAutomaticJump(pawnOnEndPosition, nextCoordinate[0]);
                 break;
-            default: // more than 1 enemy around pawn
-                chooseFromTheseCoordinates(nextCoordinate, pawn);
+            default:
+                chooseFromTheseCoordinates(nextCoordinate);
                 break;
 
         }
@@ -116,12 +108,11 @@ public class Board {
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
         movePawn(pawn, coordinates);
-        System.out.println(toString());
         System.out.println("Automatic jump!");
         TimeUnit.SECONDS.sleep(1);
     }
 
-    private void chooseFromTheseCoordinates(int[][] nextCoordinate, Pawn pawn) {
+    private void chooseFromTheseCoordinates(int[][] nextCoordinate) {
         Game game = new Game();
         game.automaticMoveManage(nextCoordinate);
     }
