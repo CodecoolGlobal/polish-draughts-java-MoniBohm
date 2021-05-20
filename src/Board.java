@@ -49,22 +49,23 @@ public class Board {
     }
 
     public void movePawn(Pawn pawn, int[] endPosition) throws InterruptedException {
-            Color color = pawn.getColor();
-            boolean isCrowned = pawn.getIsCrowned();
-            Pawn.Coordinates position = new Pawn.Coordinates(endPosition[0], endPosition[1]);
-            removePawn(pawn);
-            boolean newQueen = (endPosition[0]==fields.length-1 && color == Color.black) || (endPosition[0]==0 && color == Color.white);
-            if(newQueen){
-                fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, true);
-            } else {
-                fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, isCrowned);
-            }
-            if(!pawn.getIsCrowned()){
-            getEnemyPosition(pawn, endPosition);}
-            else {
-
-            }
+        printBoardForAutomaticJump();
+        Color color = pawn.getColor();
+        boolean isCrowned = pawn.getIsCrowned();
+        Pawn.Coordinates position = new Pawn.Coordinates(endPosition[0], endPosition[1]);
+        removePawn(pawn);
+        boolean newQueen = (endPosition[0]==fields.length-1 && color == Color.black) || (endPosition[0]==0 && color == Color.white);
+        if(newQueen){
+            fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, true);
+        } else {
+            fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, isCrowned);
         }
+        if(!pawn.getIsCrowned()){
+        getEnemyPosition(pawn, endPosition);}
+        else {
+
+        }
+    }
 
     private void getEnemyPosition(Pawn pawn, int[] endPosition) throws InterruptedException {
         int [] startPosition = pawn.getCoordinates();
@@ -116,8 +117,6 @@ public class Board {
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
         movePawn(pawn, coordinates);
-        System.out.println("Automatic jump!");
-        TimeUnit.SECONDS.sleep(1);
     }
 
     private void chooseFromTheseCoordinates(int[][] nextCoordinate) {
@@ -132,6 +131,17 @@ public class Board {
     public boolean isValidMoveOnBoard(int[] startPosition, int[] endPosition){
         Pawn pawn = fields[startPosition[0]][startPosition[1]];
         return pawn.isValidMove(endPosition, fields);
+    }
+
+    private void printBoardForAutomaticJump() throws InterruptedException {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements[3].getMethodName() == "doAutomaticJump"){
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+            System.out.println(toString());
+            System.out.println("\033[0;33m"+"Automatic jump!"+"\u001B[0m");
+            TimeUnit.SECONDS.sleep(3);
+        }
     }
 
 }

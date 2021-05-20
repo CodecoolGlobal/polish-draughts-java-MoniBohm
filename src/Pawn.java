@@ -76,6 +76,7 @@ public class Pawn {
                 }
             }
             else if ((i != distance) && board[currentRow][currentCol] != null && board[currentRow][currentCol].getColor() != this.color) {
+                // add enemy coor to list
                 if ((board[currentRow + currentRoute[0]][currentCol + currentRoute[1]]) != null) {
                     return false;
                 }
@@ -103,18 +104,6 @@ public class Pawn {
 
         }
 
-
-        /*boolean isNextField = (this.color.equals(Color.white ) && startRow - endRow == 1) || (this.color.equals(Color.black) && startRow - endRow == -1);
-        boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
-        if (isNextField) {
-            if (Math.abs(startCol - endCol) == 1) {
-                return true;
-            }
-        }
-        if(isFurtherField){
-            return isEnemyInTheMiddle(board, startRow, endRow, startCol, endCol);
-        }
-        return  false;*/
     }
 
     private boolean notCrownedPawnValidation(int[] endPosition, Pawn[][] board) {

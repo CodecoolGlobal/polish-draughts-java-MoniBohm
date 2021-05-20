@@ -28,13 +28,7 @@ public class Game {
             playRound(player);
             clearScreen();
         }
-        if (hasWon()) {
-            String animal = player==1 ? "giraffes":"lions";
-            System.out.printf("%nThe winner is: %s. Congratulations!", animal);
-        }
-        if (isDraw()) {
-            System.out.println("It's a draw. Maybe play another one!");
-        }
+        showResult(player);
     }
 
     private void playRound(int player) throws InterruptedException {
@@ -365,6 +359,16 @@ public class Game {
             }
         }
         positions.add(newPositions);
+    }
+
+    private void showResult(int player) {
+        if (hasWon()) {
+            String animal = player==1 ? "giraffes":"lions";
+            System.out.printf("%nThe winner is: %s. Congratulations!", animal);
+        }
+        if (isDraw()) {
+            System.out.println("It's a draw. Maybe play another one!");
+        }
     }
 
 }
