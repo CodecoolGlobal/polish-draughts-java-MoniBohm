@@ -1,7 +1,5 @@
-import javax.swing.*;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +7,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.awt.Color;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Game {
     List<List> positions = new ArrayList<List>();
@@ -39,7 +35,7 @@ public class Game {
         return input >= 10 && input <= 20;
     }
 
-    public void clearScreen() throws IOException, InterruptedException {
+    public void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -63,7 +59,7 @@ public class Game {
         this.board = new Board(boardSize);
     }
 
-    public void start() throws InterruptedException, IOException {
+    public void start() throws InterruptedException {
         int player = -1;
         while(checkForDominantWinner() == null){
             System.out.println(board.toString());

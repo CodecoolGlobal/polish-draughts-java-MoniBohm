@@ -1,8 +1,8 @@
 import java.awt.Color;
 
 public class Pawn {
-    private boolean isCrowned;
-    private Coordinates position;
+    private final boolean isCrowned;
+    private final Coordinates position;
     private final Color color;
 
     public Pawn(Color color, Coordinates position, boolean isCrowned) {
