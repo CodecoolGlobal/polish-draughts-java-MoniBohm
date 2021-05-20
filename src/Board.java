@@ -7,7 +7,7 @@ public class Board {
     private final Pawn[][] fields;
     private final int boardsize;
 
-    //board creation
+
     public Board(int boardsize) {
         this.boardsize = boardsize;
         //between 10 and 20, place pawn
@@ -46,7 +46,7 @@ public class Board {
         StringGenerator boardString = new StringGenerator(fields);
         return boardString.toString();
     }
-    // move on board
+
     private void removePawn(Pawn pawn) {
         int[] removeIndex = pawn.getCoordinates();
         fields[removeIndex[0]][removeIndex[1]] = null;
@@ -57,10 +57,12 @@ public class Board {
             boolean isCrowned = pawn.getIsCrowned();
             Color color = pawn.getColor();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
-            //remove pawn oldPosition
             removePawn(pawn);
-            //put new Pawn
+
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
+            //if automaticJump
+//            System.out.println(toString());
+//            TimeUnit.SECONDS.sleep(1);
             collectEnemyAround(pawn, coordinates);
         }
 

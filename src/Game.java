@@ -15,6 +15,12 @@ public class Game {
 
     public String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
+        getNextMessage(inputType);
+        String input = keyboardInput.nextLine();
+        return input;
+    }
+
+    private void getNextMessage(String inputType) {
         switch(inputType) {
             case "boardSizeInput":
                 System.out.print("Enter board size: ");
@@ -26,8 +32,6 @@ public class Game {
                 System.out.print("Enter end position coordinate: ");
                 break;
         }
-        String input = keyboardInput.nextLine();
-        return input;
     }
 
     public boolean isBoardSizeInputNumber(String input) {
