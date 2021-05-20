@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
@@ -12,18 +14,20 @@ import java.util.stream.Stream;
 public class Game {
     final private int boardSize;
     private final Board board;
+    private final String textColor = "\033[0;33m";
+    private final String[] cheerleaders = {"Go %s!!!%n", "Your turn %s!%n", "You can win this %s!%n", "Let's go %s! %n"};
 
     public String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
         switch(inputType) {
             case "boardSizeInput":
-                System.out.print("Enter board size: ");
+                System.out.print(textColor+"Enter board size: ");
                 break;
             case "startPositionInput":
-                System.out.print("Enter start position coordinate: ");
+                System.out.print(textColor+"Enter start position coordinate: ");
                 break;
             case "endPositionInput":
-                System.out.print("Enter end position coordinate: ");
+                System.out.print(textColor+"Enter end position coordinate: ");
                 break;
         }
         String input = keyboardInput.nextLine();
@@ -70,16 +74,30 @@ public class Game {
     }
 
     private void playRound(int player) throws InterruptedException {
+        String startPosition = null;
+        String endPosition = null;
         cheerCurrentPlayer(player);
-        String startPosition = getInput("startPositionInput");
-        while(!isValidStartPosition(player, startPosition)) {
-            startPosition = getInput("startPositionInput");
-        }
-        String endPosition = getInput("endPositionInput");
-        while(!isValidEndPosition(endPosition)) {
-            endPosition = getInput("endPositionInput");
+        while((startPosition ==null) || !isMoveAccordingToRules(startPosition, endPosition)){
+                startPosition = getInput("startPositionInput");
+            while(!isValidStartPosition(player, startPosition)) {
+                startPosition = getInput("startPositionInput");
+            }
+                endPosition = getInput("endPositionInput");
+            while(!isValidEndPosition(endPosition)) {
+                endPosition = getInput("endPositionInput");
+            }
         }
         tryToMakeMove(startPosition, endPosition);
+    }
+
+    private boolean isMoveAccordingToRules(String startPosition, String endPosition){
+        int[] startCoor = convertInputToIntArr(startPosition);
+        int[] endCoor = convertInputToIntArr(endPosition);
+        if(board.isValidMoveOnBoard(startCoor, endCoor)) {
+            return true;
+        }
+        System.out.println("Invalid move, please enter new coordinates!");
+        return false;
     }
 
     private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
@@ -90,11 +108,10 @@ public class Game {
     }
 
     private void cheerCurrentPlayer(int player) {
-        String[] cheerleaders = {"Go %s!!!%n", "Your turn %s!%n", "You can win this %s!%n", "Let's go %s! %n"};
         String animal = player==1 ? "giraffes":"lions";
         Random random = new Random();
         int index = random.nextInt(cheerleaders.length);
-        System.out.printf("\033[0;33m"+cheerleaders[index], animal);
+        System.out.printf(textColor+cheerleaders[index], animal);
     }
 
     public boolean checkForDrawWithKings() {

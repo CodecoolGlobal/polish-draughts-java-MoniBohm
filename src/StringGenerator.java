@@ -1,17 +1,18 @@
 import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class StringGenerator {
     Pawn[][] fields;
     final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     final String ANSI_RESET = "\u001B[0m";
     final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-    final String ANSI_GREEN_BACKGROUND = "\033[42m";
     final String YELLOW_BACKGROUND = "\033[43m";
     final String YELLOW = "\033[0;33m";
 
     final String emptyBlackField = ANSI_BLACK_BACKGROUND + "    " + ANSI_RESET;
-    final String emptyWhiteField = ANSI_GREEN_BACKGROUND + "    " + ANSI_RESET;
+    final String emptyWhiteField = YELLOW_BACKGROUND + "    " + ANSI_RESET;
     final String blackPawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD81 " + ANSI_RESET;
     final String whitePawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD92 " + ANSI_RESET;
 
@@ -81,4 +82,5 @@ public class StringGenerator {
         }
         return header.append("\n");
     }
+
 }

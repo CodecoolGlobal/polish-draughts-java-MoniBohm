@@ -52,8 +52,6 @@ public class Board {
     }
 
     public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
-        //collect new data
-        if (pawn.isValidMove(coordinates, fields)) {
             Color color = pawn.getColor();
             boolean isCrowned = pawn.getIsCrowned();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
@@ -62,7 +60,6 @@ public class Board {
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
             collectEnemyAround(pawn, coordinates);
-        }
     }
 
     private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
@@ -126,6 +123,11 @@ public class Board {
 
     public Pawn getPawn(int row, int col){
         return fields[row][col];
+    }
+
+    public boolean isValidMoveOnBoard(int[] startPosition, int[] endPosition){
+        Pawn pawn = fields[startPosition[0]][startPosition[1]];
+        return pawn.isValidMove(endPosition, fields);
     }
 
 }
