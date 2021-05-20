@@ -60,23 +60,23 @@ public class Board {
                 fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, isCrowned);
             }
             if(!pawn.getIsCrowned()){
-            checkFieldsAround(pawn, endPosition);}
+            getEnemyPosition(pawn, endPosition);}
         }
 
-    private void checkFieldsAround(Pawn pawn, int[] endPosition) throws InterruptedException {
+    private void getEnemyPosition(Pawn pawn, int[] endPosition) throws InterruptedException {
         int [] startPosition = pawn.getCoordinates();
         if(Math.abs(startPosition[0] - endPosition[0]) == 2){
             if(startPosition[1] - endPosition[1] == -2){
-                moveToLeft(endPosition, startPosition);
+                moveLeft(endPosition, startPosition);
             }
             if(startPosition[1] - endPosition[1] == 2){
-                moveToRight(endPosition, startPosition);
+                moveRight(endPosition, startPosition);
             }
             multipleJumps(pawn, endPosition);
         }
     }
 
-    private void moveToRight(int[] endPosition, int[] startPosition) {
+    private void moveRight(int[] endPosition, int[] startPosition) {
         if(startPosition[0] - endPosition[0] == -2){
             removePawn(fields[startPosition[0]+1][startPosition[1]-1]);
         }
@@ -85,7 +85,7 @@ public class Board {
         }
     }
 
-    private void moveToLeft(int[] endPosition, int[] startPosition) {
+    private void moveLeft(int[] endPosition, int[] startPosition) {
         if(startPosition[0] - endPosition[0] == -2){
             removePawn(fields[startPosition[0]+1][startPosition[1]+1]);
         }

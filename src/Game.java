@@ -20,6 +20,7 @@ public class Game {
     }
 
     public void start() throws InterruptedException {
+        clearScreen();
         int player = -1;
         while (checkForDominantWinner() == null) {
             System.out.println(board.toString());
