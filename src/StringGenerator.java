@@ -12,6 +12,8 @@ public class StringGenerator {
     final String emptyWhiteField = YELLOW_BACKGROUND + "    " + ANSI_RESET;
     final String blackPawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD81 " + ANSI_RESET;
     final String whitePawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD92 " + ANSI_RESET;
+    final String blackQueenBlackField = ANSI_BLACK_BACKGROUND + " \u2655  " + ANSI_RESET;
+    final String whiteQueenBlackField = ANSI_BLACK_BACKGROUND + " \u265B  " + ANSI_RESET;
 
 
     public StringGenerator(Pawn[][] fields) {
@@ -24,7 +26,7 @@ public class StringGenerator {
         StringBuilder header = createHeader();
         board.append(header);
         for (int i = 0; i < fields.length; i++) {
-            String letter = YELLOW + alphabet[i] + " ";
+            String letter = YELLOW + alphabet[i] + " "+ANSI_RESET;
             board.append(letter);
             rowToString(board, fields[i], i);
             board.append(newLine);
@@ -33,7 +35,6 @@ public class StringGenerator {
     }
 
     private void rowToString(StringBuilder board, Pawn[] row, int rowNumber) {
-        int boardSize = fields[0].length;
         if (rowNumber % 2 == 0) {
             evenRows(board, row);
         } else {
@@ -65,8 +66,13 @@ public class StringGenerator {
         if (row[i] == null) {
             board.append(emptyBlackField);
         } else {
-            String pawnAndField = (row[i].getColor() == Color.black ? blackPawnBlackField : whitePawnBlackField);
-            board.append(pawnAndField);
+            if(row[i].getIsCrowned()) {
+                String pawnAndField = (row[i].getColor() == Color.black ? blackQueenBlackField : whiteQueenBlackField);
+                board.append(pawnAndField);
+            } else {
+                String pawnAndField = (row[i].getColor() == Color.black ? blackPawnBlackField : whitePawnBlackField);
+                board.append(pawnAndField);
+            }
         }
     }
 

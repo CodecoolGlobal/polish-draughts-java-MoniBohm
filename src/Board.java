@@ -48,17 +48,22 @@ public class Board {
         fields[removeIndex[0]][removeIndex[1]] = null;
     }
 
-    public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
+    public void movePawn(Pawn pawn, int[] endPosition) throws InterruptedException {
             Color color = pawn.getColor();
             boolean isCrowned = pawn.getIsCrowned();
-            Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
+            Pawn.Coordinates position = new Pawn.Coordinates(endPosition[0], endPosition[1]);
             removePawn(pawn);
-            fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
+            boolean newQueen = (endPosition[0]==fields.length-1 && color == Color.black) || (endPosition[0]==0 && color == Color.white);
+            if(newQueen){
+                fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, true);
+            } else {
+                fields[endPosition[0]][endPosition[1]] = new Pawn(color, position, isCrowned);
+            }
             if(!pawn.getIsCrowned()){
-            collectEnemyAround(pawn, coordinates);}
+            checkFieldsAround(pawn, endPosition);}
         }
 
-    private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
+    private void checkFieldsAround(Pawn pawn, int[] endPosition) throws InterruptedException {
         int [] startPosition = pawn.getCoordinates();
         if(Math.abs(startPosition[0] - endPosition[0]) == 2){
             if(startPosition[1] - endPosition[1] == -2){
