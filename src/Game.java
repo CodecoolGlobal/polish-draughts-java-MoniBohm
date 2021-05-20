@@ -55,7 +55,7 @@ public class Game {
     public void start() throws InterruptedException {
         System.out.println(board.toString());
         // only for testing purposes
-        while(checkForDominantWinner() == null){
+        while(checkForDominantWinner() != null){
             playRound(1);
             System.out.println(board.toString());
             playRound(2);
@@ -63,24 +63,6 @@ public class Game {
         }
     }
 
-    private void playRound(int player) throws InterruptedException {
-        String startPosition = getInput("startPositionInput");
-        while(!isValidStartPosition(player, startPosition)) {
-            startPosition = getInput("startPositionInput");
-        }
-        String endPosition = getInput("endPositionInput");
-        while(!isValidEndPosition(endPosition)) {
-            endPosition = getInput("endPositionInput");
-        }
-        tryToMakeMove(startPosition, endPosition);
-    }
-
-    private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
-        int[] startCoor = convertInputToIntArr(startPosition);
-        int[] endCoor = convertInputToIntArr(endPosition);
-        Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
-        board.movePawn(pawn, endCoor);
-    }
 
 
     public boolean checkForDrawWithKings() {
@@ -146,28 +128,17 @@ public class Game {
     private boolean areThereAnyPossibleMove(int row, int col, Pawn currentPawn) {
         boolean arePiecesBlocked = true;
         int[][] fieldDistances = generateFieldDistances(currentPawn);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 4; i++) {
             if (!checkIfFieldIsOutOfBoard(row + fieldDistances[i][0], col + fieldDistances[i][1])) {
-                if (board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) == null) {
-                    arePiecesBlocked = false;
+                if (i < 2) {
+                    if (board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) == null) {
+                        arePiecesBlocked = false;
+                    }
                 }
-                else if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
+                if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
                     if (currentPawn.getColor() != board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]).getColor()) {
                         if (!checkIfFieldIsOutOfBoard(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1]*2))) {
                             if (board.getPawn(row + (fieldDistances[i][0]*2), col + (fieldDistances[i][1] * 2)) == null) {
-                                arePiecesBlocked = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (int i = 2; i <= 3; i++) {
-            if (!checkIfFieldIsOutOfBoard(row + fieldDistances[i][0], col + fieldDistances[i][1])) {
-                if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
-                    if (currentPawn.getColor() != board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]).getColor()) {
-                        if (!checkIfFieldIsOutOfBoard(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1] * 2))) {
-                            if (board.getPawn(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1] * 2)) == null) {
                                 arePiecesBlocked = false;
                             }
                         }
@@ -183,14 +154,16 @@ public class Game {
 
     private void playRound(int player) throws InterruptedException {
         String startPosition = getInput("startPositionInput");
-        while(!isValidStartPosition(player, startPosition)) {
+        while (!isValidStartPosition(player, startPosition)) {
             startPosition = getInput("startPositionInput");
         }
         String endPosition = getInput("endPositionInput");
-        while(!isValidEndPosition(endPosition)) {
+        while (!isValidEndPosition(endPosition)) {
             endPosition = getInput("endPositionInput");
         }
         tryToMakeMove(startPosition, endPosition);
+    }
+
     public String checkForTacticalWinner() {
         boolean areBlackPiecesBlocked = true;
         boolean areWhitePiecesBlocked = true;
@@ -204,6 +177,7 @@ public class Game {
                         }
                         else if (currentPawn.getColor() == Color.white) {
                             areWhitePiecesBlocked = areThereAnyPossibleMove(row, col, currentPawn);
+
                         }
                     }
                 }
@@ -219,10 +193,11 @@ public class Game {
     }
 
     private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
-        int[] startCoor = convertInputToIntArr(startPosition);
-        int[] endCoor = convertInputToIntArr(endPosition);
-        Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
-        board.movePawn(pawn, endCoor);
+            int[] startCoor = convertInputToIntArr(startPosition);
+            int[] endCoor = convertInputToIntArr(endPosition);
+            Pawn pawn = board.getPawn(startCoor[0], startCoor[1]);
+            board.movePawn(pawn, endCoor);
+    }
 
     private String checkForDominantWinner() {
         Color[] colorsOfPawns = new Color[2];
@@ -353,11 +328,13 @@ public class Game {
         if (chosenPawn == null) {
             System.out.println("Chosen field is empty");
             return false;
-        } else {
+        }
+        else {
             Color pawnColor = chosenPawn.getColor();
             if ((pawnColor == Color.white && player == 1) || (pawnColor == Color.black && player == 2)) {
                 return true;
-            } else {
+            }
+            else {
                 System.out.println("Chosen pawn is incorrect");
                 return false;
             }

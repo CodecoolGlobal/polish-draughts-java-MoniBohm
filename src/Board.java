@@ -101,7 +101,7 @@ public class Board {
         int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition, n);
         Pawn pawnOnEndPosition = fields[endPosition[0]][endPosition[1]];
         int optinalMove = nextCoordinate[0].length;
-        switch (optinalMove){
+        switch (optinalMove) {
             case 0: // no enemy around pawn
                 break;
             case 2: // 1 enemy around pawn
@@ -110,11 +110,7 @@ public class Board {
             default: // more than 1 enemy around pawn
                 chooseFromTheseCoordinates(nextCoordinate, pawn);
                 break;
-
-        for (Pawn col : row) {
-            colToString(board, col);
         }
-        board.append(newLine);
     }
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
