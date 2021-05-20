@@ -5,24 +5,24 @@ import java.util.concurrent.TimeUnit;
 public class Board {
 
     private Pawn[][] fields;
-    private int n;
+    private int boardsize;
 
     //board creation
-    public Board(int n) {
-        this.n = n;
+    public Board(int boardsize) {
+        this.boardsize = boardsize;
         //between 10 and 20, place pawn
-        fields = new Pawn[n][n];
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                addPawn(row, col, n);
+        fields = new Pawn[boardsize][boardsize];
+        for (int row = 0; row < boardsize; row++) {
+            for (int col = 0; col < boardsize; col++) {
+                addPawn(row, col, boardsize);
             }
         }
     }
 
-    private void addPawn(int row, int col, int n) {
-        Color color = determinePawnColor(row, n);
-        if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
-                //&& (row > n / 2 || row < n / 2 - 1)){
+    private void addPawn(int row, int col, int boardsize) {
+        Color color = determinePawnColor(row, boardsize);
+        if ((col + row) % 2 == 0 && (row > boardsize / 2 || row < boardsize / 2 - 1)) {
+                //&& (row > boardsize / 2 || row < boardsize / 2 - 1)){
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
             fields[row][col] = new Pawn(color, position, false);
         } else {
@@ -30,12 +30,12 @@ public class Board {
         }
     }
 
-    private Color determinePawnColor(int row, int n) {
+    private Color determinePawnColor(int row, int boardsize) {
         Color color = null;
 
-        if (n / 2 < row) {
+        if (boardsize / 2 < row) {
             color = Color.white;
-        } else if (n / 2 > row) {
+        } else if (boardsize/ 2 > row) {
             color = Color.black;
         }
         return color;
@@ -98,7 +98,7 @@ public class Board {
     }
 
     private void multipleJumps(Pawn pawn, int[] endPosition) throws InterruptedException {
-        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition, n);
+        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition, boardsize);
         Pawn pawnOnEndPosition = fields[endPosition[0]][endPosition[1]];
         int optinalMove = nextCoordinate[0].length;
         switch (optinalMove){
@@ -108,7 +108,7 @@ public class Board {
                 doAutomaticJump(pawnOnEndPosition, nextCoordinate[0]);
                 break;
             default: // more than 1 enemy around pawn
-                chooseFromTheseCoordinates(nextCoordinate, pawn);
+                chooseFromTheseCoordinates(nextCoordinate);
                 break;
         }
     }
@@ -120,7 +120,7 @@ public class Board {
         TimeUnit.SECONDS.sleep(1);
     }
 
-    private void chooseFromTheseCoordinates(int[][] nextCoordinate, Pawn pawn) {
+    private void chooseFromTheseCoordinates(int[][] nextCoordinate) {
         Game game = new Game();
         game.automaticMoveManage(nextCoordinate);
     }
@@ -129,7 +129,8 @@ public class Board {
         return fields[row][col];
     }
 
-    public boolean isMoveAccordingToRules(Pawn pawn, int[] endposition){
-        pawn.isValidMove();
-    }
+//    public boolean isMoveAccordingToRules(Pawn pawn, int[] endposition){
+//        pawn.isValidMove(endposition, pawn);
+//        return false;
+//    }
 }
