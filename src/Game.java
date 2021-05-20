@@ -127,7 +127,6 @@ public class Game {
         return (pawnCount == 0 && blackKingCount == 1 && whiteKingCount == 1);
     }
 
-
     public boolean checkIfFieldIsOutOfBoard(int row, int col) {
         return (row > (boardSize-1) || row < 0 || col > (boardSize-1) || col < 0);
     }
@@ -191,9 +190,6 @@ public class Game {
         }
         return arePiecesBlocked;
     }
-
-
-
 
     public String checkForTacticalWinner() {
         boolean areBlackPiecesBlocked = true;

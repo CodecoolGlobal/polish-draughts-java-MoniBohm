@@ -63,6 +63,7 @@ public class Board {
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
             collectEnemyAround(pawn, coordinates);
         }
+        //királynő elágazása -Móni
     }
 
     private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
@@ -109,12 +110,12 @@ public class Board {
             default: // more than 1 enemy around pawn
                 chooseFromTheseCoordinates(nextCoordinate, pawn);
                 break;
-
         }
     }
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
         movePawn(pawn, coordinates);
+        System.out.println(toString());
         System.out.println("Automatic jump!");
         TimeUnit.SECONDS.sleep(1);
     }
