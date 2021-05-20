@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Board {
 
-    private Pawn[][] fields;
-    private int boardsize;
+    private final Pawn[][] fields;
+    private final int boardsize;
 
     //board creation
     public Board(int boardsize) {
@@ -41,6 +41,7 @@ public class Board {
         return color;
     }
 
+    @Override
     public String toString(){
         StringGenerator boardString = new StringGenerator(fields);
         return boardString.toString();
@@ -52,10 +53,9 @@ public class Board {
     }
 
     public void movePawn(Pawn pawn, int[] coordinates) throws InterruptedException {
-        //collect new data
         if (pawn.isValidMove(coordinates, fields)) {
-            Color color = pawn.getColor();
             boolean isCrowned = pawn.getIsCrowned();
+            Color color = pawn.getColor();
             Pawn.Coordinates position = new Pawn.Coordinates(coordinates[0], coordinates[1]);
             //remove pawn oldPosition
             removePawn(pawn);
@@ -63,7 +63,7 @@ public class Board {
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
             collectEnemyAround(pawn, coordinates);
         }
-        //királynő elágazása -Móni
+
     }
 
     private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
@@ -115,7 +115,6 @@ public class Board {
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
         movePawn(pawn, coordinates);
-        System.out.println(toString());
         System.out.println("Automatic jump!");
         TimeUnit.SECONDS.sleep(1);
     }

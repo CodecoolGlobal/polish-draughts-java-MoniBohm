@@ -46,6 +46,13 @@ public class Pawn {
         if (!this.getIsCrowned()) {
             return notCrownedPawnValidation(endPosition, board);
         }
+        else if(this.getIsCrowned()){
+            return moveMentWithCrownedPawn(endPosition, board);
+        }
+        return false;
+    }
+
+    private boolean moveMentWithCrownedPawn(int[] endPosition, Pawn[][] board) {
         return false;
     }
 
@@ -70,12 +77,14 @@ public class Pawn {
     private boolean isEnemyInTheMiddle(Pawn[][] board, int startRow, int endRow, int startCol, int endCol) {
         Pawn middleField = null;
         if (endCol < startCol) {
+            //kiszervezni új functionbe
             if (endRow > startRow) {
                 middleField = board[startRow + 1][startCol - 1];
             } else if (endRow < startRow) {
                 middleField = board[startRow - 1][startCol - 1];
             }
         } else if (endCol > startCol) {
+           //ezt is
             if (endRow > startRow) {
                 middleField = board[startRow + 1][startCol + 1];
             } else if (endRow < startRow) {
@@ -84,6 +93,7 @@ public class Pawn {
         }
     return middleField != null && middleField.getColor() != this.getColor();
     }
+
 }
 
 
