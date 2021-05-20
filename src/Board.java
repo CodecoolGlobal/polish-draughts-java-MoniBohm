@@ -61,6 +61,9 @@ public class Board {
             }
             if(!pawn.getIsCrowned()){
             getEnemyPosition(pawn, endPosition);}
+            else {
+
+            }
         }
 
     private void getEnemyPosition(Pawn pawn, int[] endPosition) throws InterruptedException {

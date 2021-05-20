@@ -22,11 +22,18 @@ public class Game {
     public void start() throws InterruptedException {
         clearScreen();
         int player = -1;
-        while (checkForDominantWinner() == null) {
+        while (!hasWon() && !isDraw()) {
             System.out.println(board.toString());
             player = player == 1 ? 2 : 1;
             playRound(player);
             clearScreen();
+        }
+        if (hasWon()) {
+            String animal = player==1 ? "giraffes":"lions";
+            System.out.printf("%nThe winner is: %s. Congratulations!", animal);
+        }
+        if (isDraw()) {
+            System.out.println("It's a draw. Maybe play another one!");
         }
     }
 
@@ -245,7 +252,7 @@ public class Game {
         return arePiecesBlocked;
     }
 
-    public String checkForTacticalWinner() {
+    public boolean checkForTacticalWinner() {
         boolean areBlackPiecesBlocked = true;
         boolean areWhitePiecesBlocked = true;
         for (int row = 0; row < boardSize; row++) {
@@ -264,24 +271,32 @@ public class Game {
             }
         }
         if (areBlackPiecesBlocked && !areWhitePiecesBlocked) {
-            return "White";
+            return true;
         }
         else if (!areBlackPiecesBlocked && areWhitePiecesBlocked) {
-            return "Black";
+            return true;
         }
-        return null;
+        return false;
     }
 
-    private String checkForDominantWinner() {
+    private boolean hasWon() {
+        return checkForDominantWinner() || checkForTacticalWinner();
+    }
+
+    private boolean isDraw() {
+        return checkDrawForRepeatedPositions() || checkForDrawWithKings();
+    }
+
+    private boolean checkForDominantWinner() {
         Color[] colorsOfPawns = new Color[2];
         collectFieldsPawns(colorsOfPawns);
         if (colorsOfPawns[0] == Color.black && colorsOfPawns[1] == null) {
-            return "Black";
+            return true;
         }
         else if (colorsOfPawns[0] == null && colorsOfPawns[1] == Color.white) {
-            return "White";
+            return true;
         }
-        return null;
+        return false;
     }
 
     private void collectFieldsPawns(Color[] colorsOfPawns) {
