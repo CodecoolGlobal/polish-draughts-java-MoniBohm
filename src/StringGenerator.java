@@ -9,9 +9,10 @@ public class StringGenerator {
     final String ANSI_GREEN_BACKGROUND = "\033[42m";
     final String YELLOW_BACKGROUND = "\033[43m";
     final String YELLOW = "\033[0;33m";
+    final String grass = "\uD83C\uDF3F";
 
     final String emptyBlackField = ANSI_BLACK_BACKGROUND + "    " + ANSI_RESET;
-    final String emptyWhiteField = ANSI_GREEN_BACKGROUND + "    " + ANSI_RESET;
+    final String emptyWhiteField = YELLOW + "    " + ANSI_RESET;
     final String blackPawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD81 " + ANSI_RESET;
     final String whitePawnBlackField = ANSI_BLACK_BACKGROUND + " \uD83E\uDD92 " + ANSI_RESET;
 
