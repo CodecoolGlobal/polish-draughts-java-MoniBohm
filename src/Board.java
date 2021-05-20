@@ -25,7 +25,7 @@ public class Board {
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
                 //&& (row > n / 2 || row < n / 2 - 1)){
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
-            fields[row][col] = new Pawn(color, position, true);
+            fields[row][col] = new Pawn(color, position, false);
         } else {
             fields[row][col] = null;
         }
