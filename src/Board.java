@@ -129,4 +129,7 @@ public class Board {
         return fields[row][col];
     }
 
+    public boolean isMoveAccordingToRules(Pawn pawn, int[] endposition){
+        pawn.isValidMove();
+    }
 }
