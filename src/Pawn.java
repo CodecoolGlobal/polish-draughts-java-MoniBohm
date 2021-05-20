@@ -62,48 +62,43 @@ public class Pawn {
         int distance = Math.abs(endRow - startRow);
         int [] currentRoute = new int[2];
         if ((Math.abs(endRow - startRow)) == (Math.abs(endCol - startCol))) {
-            if (route[0] > 0 && route[1] > 0) {
-                currentRoute[0] = routes[0][0];
-                currentRoute[1] = routes[0][1];
-            }
-            else if (route[0] > 0 && route[1] < 0) {
-                currentRoute[0] = routes[1][0];
-                currentRoute[1] = routes[1][1];
-            }
-            else if (route[0] < 0 && route[1] > 0) {
-                currentRoute[0] = routes[2][0];
-                currentRoute[1] = routes[2][1];
-            }
-            else if (route[0] < 0 && route[1] < 0) {
-                currentRoute[0] = routes[3][0];
-                currentRoute[0] = routes[3][1];
-
-            }
+            createNewCurrentRoute(routes, route, currentRoute);
         }
+        return !isCanGoQueen(board, startRow, startCol, distance, currentRoute);
+    }
+
+    private boolean isCanGoQueen(Pawn[][] board, int startRow, int startCol, int distance, int[] currentRoute) {
         for (int i = 0; i <= distance; i++) {
             int currentRow = startRow + (currentRoute[0] * i);
             int currentCol = startCol + (currentRoute[1] * i);
             if ((board[currentRow][currentCol] != null) && (board[currentRow][currentCol].getColor() != this.color)) {
                 if (board[currentRoute[0] * (i+1)][currentRoute[0] * (i+1)] != null) {
-                    return false;
+                    return true;
                 }
             }
 
         }
+        return false;
+    }
 
+    private void createNewCurrentRoute(int[][] routes, int[] route, int[] currentRoute) {
+        if (route[0] > 0 && route[1] > 0) {
+            currentRoute[0] = routes[0][0];
+            currentRoute[1] = routes[0][1];
+        }
+        else if (route[0] > 0 && route[1] < 0) {
+            currentRoute[0] = routes[1][0];
+            currentRoute[1] = routes[1][1];
+        }
+        else if (route[0] < 0 && route[1] > 0) {
+            currentRoute[0] = routes[2][0];
+            currentRoute[1] = routes[2][1];
+        }
+        else if (route[0] < 0 && route[1] < 0) {
+            currentRoute[0] = routes[3][0];
+            currentRoute[1] = routes[3][1];
 
-        /*boolean isNextField = (this.color.equals(Color.white ) && startRow - endRow == 1) || (this.color.equals(Color.black) && startRow - endRow == -1);
-        boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
-        if (isNextField) {
-            if (Math.abs(startCol - endCol) == 1) {
-                return true;
-            }
         }
-        if(isFurtherField){
-            return isEnemyInTheMiddle(board, startRow, endRow, startCol, endCol);
-        }
-        return  false;*/
-        return true;
     }
 
     private boolean notCrownedPawnValidation(int[] endPosition, Pawn[][] board) {
@@ -127,14 +122,12 @@ public class Pawn {
     private boolean isEnemyInTheMiddle(Pawn[][] board, int startRow, int endRow, int startCol, int endCol) {
         Pawn middleField = null;
         if (endCol < startCol) {
-            //kiszervezni új functionbe
             if (endRow > startRow) {
                 middleField = board[startRow + 1][startCol - 1];
             } else if (endRow < startRow) {
                 middleField = board[startRow - 1][startCol - 1];
             }
         } else if (endCol > startCol) {
-           //ezt is
             if (endRow > startRow) {
                 middleField = board[startRow + 1][startCol + 1];
             } else if (endRow < startRow) {

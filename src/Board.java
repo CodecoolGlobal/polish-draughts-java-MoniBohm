@@ -62,7 +62,8 @@ public class Board {
             removePawn(pawn);
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
-            collectEnemyAround(pawn, coordinates);
+            if(!pawn.getIsCrowned()){
+            collectEnemyAround(pawn, coordinates);}
         }
 
     private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
