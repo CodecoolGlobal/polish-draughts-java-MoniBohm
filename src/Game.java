@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
@@ -15,7 +14,65 @@ public class Game {
     private final String textColor = "\033[0;33m";
     private final String[] cheerleaders = {"Go %s!!!%n", "Your turn %s!%n", "You can win this %s!%n", "Let's go %s! %n"};
 
-    public String getInput(String inputType) {
+    public Game() {
+        this.boardSize = getBoardSize();
+        this.board = new Board(boardSize);
+    }
+
+    public void start() throws InterruptedException {
+        int player = -1;
+        while (checkForDominantWinner() == null) {
+            System.out.println(board.toString());
+            player = player == 1 ? 2 : 1;
+            playRound(player);
+            clearScreen();
+        }
+    }
+
+    private void playRound(int player) throws InterruptedException {
+        String startPosition = null;
+        String endPosition = null;
+        cheerCurrentPlayer(player);
+        while((startPosition ==null) || !isMoveAccordingToRules(startPosition, endPosition)){
+            startPosition = isValidFirstCoordinate(player);
+            endPosition = isValidSecondCoordinate(startPosition);
+        }
+        tryToMakeMove(startPosition, endPosition);
+    }
+
+    private String isValidSecondCoordinate(String startPosition) {
+        String endPosition;
+        endPosition = getInput("endPositionInput");
+        while(!getFullValidationForEndPosition(endPosition)) {
+            endPosition = getInput("endPositionInput");
+        }
+        return endPosition;
+    }
+
+
+    public boolean getFullValidationForEndPosition(String endPosition){
+        int[] coordinates = convertInputToIntArr(endPosition);
+        Pawn targetPawn = board.getPawn(coordinates[0], coordinates[1]);
+        CreateValidation getValidation = new CreateValidation(endPosition, board, boardSize);
+        return getValidation.isValidEndPosition(endPosition, targetPawn);
+    }
+
+
+    private String isValidFirstCoordinate(int player) {
+        String startPosition;
+        startPosition = getInput("startPositionInput");
+        while(!getFullValidationForStartPosition(player, startPosition)) {
+            startPosition = getInput("startPositionInput");
+        }
+        return startPosition;
+    }
+
+    public boolean getFullValidationForStartPosition(int player, String startPosition){
+        CreateValidation getValidation = new CreateValidation(startPosition, board, boardSize);
+        return getValidation.isValidStartPosition(player, startPosition);
+    }
+
+    private String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
         switch (inputType) {
             case "boardSizeInput": System.out.print("Enter board size: "); break;
@@ -35,7 +92,7 @@ public class Game {
         return input >= 10 && input <= 20;
     }
 
-    public void clearScreen(){
+    private void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -54,38 +111,6 @@ public class Game {
         return boardSizeInput;
     }
 
-    public Game() {
-        this.boardSize = getBoardSize();
-        this.board = new Board(boardSize);
-    }
-
-    public void start() throws InterruptedException {
-        int player = -1;
-        while(checkForDominantWinner() == null){
-            System.out.println(board.toString());
-            player = player==1? 2:1;
-            playRound(player);
-            clearScreen();
-        }
-    }
-
-    private void playRound(int player) throws InterruptedException {
-        String startPosition = null;
-        String endPosition = null;
-        cheerCurrentPlayer(player);
-        while((startPosition ==null) || !isMoveAccordingToRules(startPosition, endPosition)){
-                startPosition = getInput("startPositionInput");
-            while(!isValidStartPosition(player, startPosition)) {
-                startPosition = getInput("startPositionInput");
-            }
-                endPosition = getInput("endPositionInput");
-            while(!isValidEndPosition(endPosition)) {
-                endPosition = getInput("endPositionInput");
-            }
-        }
-        tryToMakeMove(startPosition, endPosition);
-    }
-
     private boolean isMoveAccordingToRules(String startPosition, String endPosition){
         int[] startCoor = convertInputToIntArr(startPosition);
         int[] endCoor = convertInputToIntArr(endPosition);
@@ -94,6 +119,16 @@ public class Game {
         }
         System.out.println("Invalid move, please enter new coordinates!");
         return false;
+    }
+
+
+    private int[] convertInputToIntArr(String position) {
+        int coordinatesArr[] = new int[2];
+        int firstCoordinate = position.charAt(0) - 'A';
+        int secondCoordinate = Integer.parseInt(position.substring(1)) - 1;
+        coordinatesArr[0] = firstCoordinate;
+        coordinatesArr[1] = secondCoordinate;
+        return coordinatesArr;
     }
 
     private void tryToMakeMove(String startPosition, String endPosition) throws InterruptedException {
@@ -147,26 +182,34 @@ public class Game {
     private int[][] generateFieldDistances(Pawn currentPawn) {
         int[][] fieldDistances = new int[4][2];
         if (currentPawn.getColor() == Color.black) {
-            fieldDistances[0][0] = 1;
-            fieldDistances[0][1] = 1;
-            fieldDistances[1][0] = 1;
-            fieldDistances[1][1] = -1;
-            fieldDistances[2][0] = -1;
-            fieldDistances[2][1] = -1;
-            fieldDistances[3][0] = -1;
-            fieldDistances[3][1] = 1;
+            getBlackPawnFieldDistances(fieldDistances);
         }
         else if (currentPawn.getColor() == Color.white) {
-            fieldDistances[0][0] = -1;
-            fieldDistances[0][1] = -1;
-            fieldDistances[1][0] = -1;
-            fieldDistances[1][1] = 1;
-            fieldDistances[2][0] = 1;
-            fieldDistances[2][1] = 1;
-            fieldDistances[3][0] = 1;
-            fieldDistances[3][1] = -1;
+            getWhitePawnFieldDistances(fieldDistances);
         }
         return fieldDistances;
+    }
+
+    private void getWhitePawnFieldDistances(int[][] fieldDistances) {
+        fieldDistances[0][0] = -1;
+        fieldDistances[0][1] = -1;
+        fieldDistances[1][0] = -1;
+        fieldDistances[1][1] = 1;
+        fieldDistances[2][0] = 1;
+        fieldDistances[2][1] = 1;
+        fieldDistances[3][0] = 1;
+        fieldDistances[3][1] = -1;
+    }
+
+    private void getBlackPawnFieldDistances(int[][] fieldDistances) {
+        fieldDistances[0][0] = 1;
+        fieldDistances[0][1] = 1;
+        fieldDistances[1][0] = 1;
+        fieldDistances[1][1] = -1;
+        fieldDistances[2][0] = -1;
+        fieldDistances[2][1] = -1;
+        fieldDistances[3][0] = -1;
+        fieldDistances[3][1] = 1;
     }
 
     private boolean areThereAnyPossibleMove(int row, int col, Pawn currentPawn) {
@@ -223,18 +266,7 @@ public class Game {
 
     private String checkForDominantWinner() {
         Color[] colorsOfPawns = new Color[2];
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
-                Pawn currentPawn = board.getPawn(row, col);
-                if (currentPawn != null) {
-                    if (currentPawn.getColor() == Color.black) {
-                        colorsOfPawns[0] = Color.black;
-                    } else if (currentPawn.getColor() == Color.white) {
-                        colorsOfPawns[1] = Color.white;
-                    }
-                }
-            }
-        }
+        collectFieldsPawns(colorsOfPawns);
         if (colorsOfPawns[0] == Color.black && colorsOfPawns[1] == null) {
             return "Black";
         }
@@ -242,6 +274,25 @@ public class Game {
             return "White";
         }
         return null;
+    }
+
+    private void collectFieldsPawns(Color[] colorsOfPawns) {
+        for (int row = 0; row < boardSize; row++) {
+            checkColumns(colorsOfPawns, row);
+        }
+    }
+
+    private void checkColumns(Color[] colorsOfPawns, int row) {
+        for (int col = 0; col < boardSize; col++) {
+            Pawn currentPawn = board.getPawn(row, col);
+            if (currentPawn != null) {
+                if (currentPawn.getColor() == Color.black) {
+                    colorsOfPawns[0] = Color.black;
+                } else if (currentPawn.getColor() == Color.white) {
+                    colorsOfPawns[1] = Color.white;
+                }
+            }
+        }
     }
 
 
@@ -299,67 +350,7 @@ public class Game {
         return matcher.matches();
     }
 
-    private boolean isValidInput(String position) {
-        if (!isValidCoordinateFormat(position)) {
-            System.out.println("Please make sure format is like A1");
-            return false;
-        } else if (!isFieldOnBoard(position)) {
-            System.out.println("Chosen field is out of board");
-            return false;
-        }
-        return true;
-    }
 
-    private boolean isValidStartPosition(int player, String position) {
-        return isValidInput(position) && isCorrectPawn(player, position);
-    }
-
-    private boolean isValidEndPosition(String position) {
-        return isValidInput(position) && isChosenFieldEmpty(position);
-    }
-
-    private boolean isChosenFieldEmpty(String position) {
-        int[] coordinates = convertInputToIntArr(position);
-        Pawn chosenField = board.getPawn(coordinates[0], coordinates[1]);
-        if(chosenField == null) {
-            return true;
-        } else {
-            System.out.println("You must choose an empty field");
-            return false;
-        }
-    }
-
-    private int[] convertInputToIntArr(String position) {
-        int coordinatesArr[] = new int[2];
-        int firstCoordinate = position.charAt(0) - 'A';
-        int secondCoordinate = Integer.parseInt(position.substring(1)) - 1;
-        coordinatesArr[0] = firstCoordinate;
-        coordinatesArr[1] = secondCoordinate;
-        return coordinatesArr;
-    }
-
-    public boolean isFieldOnBoard(String position) {
-        int coordinates[] = convertInputToIntArr(position);
-        return ((coordinates[0] < boardSize && coordinates[0] >= 0) && (coordinates[1] < boardSize && coordinates[1] >= 0));
-    }
-
-    private boolean isCorrectPawn(int player, String position) {
-        // check if pawn belongs to correct player (1: white, 2: black)
-        int[] coordinates = convertInputToIntArr(position);
-        Pawn chosenPawn = board.getPawn(coordinates[0], coordinates[1]);
-        if (chosenPawn == null) {
-            System.out.println("Chosen field is empty");
-            return false;
-        } else {
-            Color pawnColor = chosenPawn.getColor();
-            if ((pawnColor == Color.white && player == 1) || (pawnColor == Color.black && player == 2)) {
-                return true;
-            } else {
-                System.out.println("Chosen pawn is incorrect");
-                return false;
-            }
-        }
-    }
 
     public void automaticMoveManage(int[][] nextCoordinate) {
         System.out.println("Choose from these coordinates: " + Arrays.deepToString(nextCoordinate));
@@ -369,6 +360,11 @@ public class Game {
         while (Arrays.asList(nextCoordinate).contains(input)) {
             System.out.println("Choose from these coordinates: " + Arrays.toString(nextCoordinate));
         }
+
+    }
+
+
+    public static class Validation {
 
     }
 }
