@@ -90,7 +90,7 @@ public class Board {
     }
 
     private void multipleJumps(Pawn pawn, int[] endPosition) throws InterruptedException {
-        int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition);
+        int[][] nextCoordinate = pawn.isCouldMultipleJumps(fields, endPosition);
         Pawn pawnOnEndPosition = fields[endPosition[0]][endPosition[1]];
         int optionalMove = nextCoordinate[0].length;
         switch (optionalMove) {

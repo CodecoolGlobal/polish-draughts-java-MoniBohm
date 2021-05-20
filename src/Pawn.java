@@ -33,12 +33,12 @@ public class Pawn {
         return this.isCrowned;
     }
 
-    public int[][] isCouldmultipleJumps(Pawn[][] board, int[] endPosition) {
+    public int[][] isCouldMultipleJumps(Pawn[][] board, int[] endPosition) {
         int row = endPosition[0];
         int col = endPosition[1];
         boolean isCrowned = getIsCrowned();
-        CoordinateGenerator doNewCoord = new CoordinateGenerator(row, col, isCrowned, board);
-        return doNewCoord.getPossibleMoves();
+        CoordinateGenerator doNewCoordinate = new CoordinateGenerator(row, col, isCrowned, board);
+        return doNewCoordinate.getPossibleMoves();
     }
 
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
