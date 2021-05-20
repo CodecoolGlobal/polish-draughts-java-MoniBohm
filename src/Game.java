@@ -76,8 +76,8 @@ public class Game {
         Scanner keyboardInput = new Scanner(System.in);
         switch (inputType) {
             case "boardSizeInput": System.out.print("Enter board size: "); break;
-            case "startPositionInput": System.out.print("Enter start position coordinate: "); break;
-            case "endPositionInput": System.out.print("Enter end position coordinate: "); break;
+            case "startPositionInput": System.out.print("Enter start position: "); break;
+            case "endPositionInput": System.out.print("Enter end position: "); break;
         }
         return keyboardInput.nextLine();
     }

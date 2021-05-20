@@ -57,7 +57,7 @@ public class CreateValidation {
     }
 
     private boolean invalidInput() {
-        System.out.println("Please make sure format is like A1");
+        System.out.println("Please make sure format is correct (example: A1)");
         return false;
     }
 

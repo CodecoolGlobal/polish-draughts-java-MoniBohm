@@ -45,7 +45,6 @@ public class Pawn {
         if (!this.getIsCrowned()) {
             return notCrownedPawnValidation(endPosition, board);
         } else if (this.getIsCrowned()) {
-            System.out.println(queenPawnMove(endPosition, board));
             return queenPawnMove(endPosition, board);
         }
         return false;
