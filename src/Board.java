@@ -21,6 +21,7 @@ public class Board {
 
     private void addPawn(int row, int col, int n) {
         Color color = determinePawnColor(row, n);
+
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
                 //&& (row > n / 2 || row < n / 2 - 1)){
             Pawn.Coordinates position = new Pawn.Coordinates(row, col);
@@ -60,7 +61,7 @@ public class Board {
             //put new Pawn
             fields[coordinates[0]][coordinates[1]] = new Pawn(color, position, isCrowned);
             collectEnemyAround(pawn, coordinates);
-    }
+        }
 
     private void collectEnemyAround(Pawn pawn, int[] endPosition) throws InterruptedException {
         int [] startPosition = pawn.getCoordinates();
@@ -97,7 +98,7 @@ public class Board {
         int[][] nextCoordinate = pawn.isCouldmultipleJumps(fields, endPosition, n);
         Pawn pawnOnEndPosition = fields[endPosition[0]][endPosition[1]];
         int optinalMove = nextCoordinate[0].length;
-        switch (optinalMove){
+        switch (optinalMove) {
             case 0: // no enemy around pawn
                 break;
             case 2: // 1 enemy around pawn
@@ -112,6 +113,7 @@ public class Board {
 
     private void doAutomaticJump(Pawn pawn,int[] coordinates) throws InterruptedException {
         movePawn(pawn, coordinates);
+        System.out.println(toString());
         System.out.println("Automatic jump!");
         TimeUnit.SECONDS.sleep(1);
     }

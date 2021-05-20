@@ -1,7 +1,4 @@
 import java.awt.Color;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class StringGenerator {
     Pawn[][] fields;
@@ -82,5 +79,4 @@ public class StringGenerator {
         }
         return header.append("\n");
     }
-
 }

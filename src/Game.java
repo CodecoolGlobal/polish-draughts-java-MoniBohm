@@ -1,9 +1,10 @@
 import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Game {
+    List<List> positions = new ArrayList<List>();
     final private int boardSize;
     private final Board board;
     private final String textColor = "\033[0;33m";
@@ -19,30 +21,27 @@ public class Game {
 
     public String getInput(String inputType) {
         Scanner keyboardInput = new Scanner(System.in);
-        switch(inputType) {
-            case "boardSizeInput":
-                System.out.print(textColor+"Enter board size: ");
-                break;
-            case "startPositionInput":
-                System.out.print(textColor+"Enter start position coordinate: ");
-                break;
-            case "endPositionInput":
-                System.out.print(textColor+"Enter end position coordinate: ");
-                break;
+        switch (inputType) {
+            case "boardSizeInput": System.out.print("Enter board size: "); break;
+            case "startPositionInput": System.out.print("Enter start position coordinate: "); break;
+            case "endPositionInput": System.out.print("Enter end position coordinate: "); break;
         }
-        String input = keyboardInput.nextLine();
-        return input;
+        return keyboardInput.nextLine();
     }
 
     public boolean isBoardSizeInputNumber(String input) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(input);
-        boolean result = matcher.matches();
-        return result;
+        return matcher.matches();
     }
 
     public boolean isBoardSizeInputValid(int input) {
         return input >= 10 && input <= 20;
+    }
+
+    public void clearScreen() throws IOException, InterruptedException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public int getBoardSize() {
@@ -64,12 +63,13 @@ public class Game {
         this.board = new Board(boardSize);
     }
 
-    public void start() throws InterruptedException {
+    public void start() throws InterruptedException, IOException {
         int player = -1;
         while(checkForDominantWinner() == null){
             System.out.println(board.toString());
             player = player==1? 2:1;
             playRound(player);
+            clearScreen();
         }
     }
 
@@ -144,7 +144,6 @@ public class Game {
         return (pawnCount == 0 && blackKingCount == 1 && whiteKingCount == 1);
     }
 
-
     public boolean checkIfFieldIsOutOfBoard(int row, int col) {
         return (row > (boardSize-1) || row < 0 || col > (boardSize-1) || col < 0);
     }
@@ -177,12 +176,14 @@ public class Game {
     private boolean areThereAnyPossibleMove(int row, int col, Pawn currentPawn) {
         boolean arePiecesBlocked = true;
         int[][] fieldDistances = generateFieldDistances(currentPawn);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 4; i++) {
             if (!checkIfFieldIsOutOfBoard(row + fieldDistances[i][0], col + fieldDistances[i][1])) {
-                if (board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) == null) {
-                    arePiecesBlocked = false;
+                if (i < 2) {
+                    if (board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) == null) {
+                        arePiecesBlocked = false;
+                    }
                 }
-                else if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
+                if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
                     if (currentPawn.getColor() != board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]).getColor()) {
                         if (!checkIfFieldIsOutOfBoard(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1]*2))) {
                             if (board.getPawn(row + (fieldDistances[i][0]*2), col + (fieldDistances[i][1] * 2)) == null) {
@@ -193,24 +194,8 @@ public class Game {
                 }
             }
         }
-        for (int i = 2; i <= 3; i++) {
-            if (!checkIfFieldIsOutOfBoard(row + fieldDistances[i][0], col + fieldDistances[i][1])) {
-                if ((board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]) != null)) {
-                    if (currentPawn.getColor() != board.getPawn(row + fieldDistances[i][0], col + fieldDistances[i][1]).getColor()) {
-                        if (!checkIfFieldIsOutOfBoard(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1] * 2))) {
-                            if (board.getPawn(row + (fieldDistances[i][0] * 2), col + (fieldDistances[i][1] * 2)) == null) {
-                                arePiecesBlocked = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
         return arePiecesBlocked;
     }
-
-
-
 
     public String checkForTacticalWinner() {
         boolean areBlackPiecesBlocked = true;
@@ -263,11 +248,59 @@ public class Game {
         return null;
     }
 
+
+    public boolean checkDrawForRepeatedPositions() {
+        int occurrences = 0;
+        for (int i = 0; i < positions.size(); i++) {
+            List currentPosition = positions.get(i);
+            for (int j = i; j < positions.size(); j++) {
+                if (currentPosition.equals(positions.get(j))) {
+                    occurrences += 1;
+                }
+                if (occurrences == 3) {
+                    return true;
+                }
+            }
+            occurrences = 0;
+        }
+        return false;
+    }
+
+    public void savePositions() {
+        List<Byte> newPositions = new ArrayList<Byte>();
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                if (board.getPawn(row, col) == null) {
+                    newPositions.add((byte) 0);
+                }
+                else if (board.getPawn(row, col) != null) {
+                    Pawn currentPawn = board.getPawn(row, col);
+                    if (currentPawn.getColor() == Color.black) {
+                        if (!currentPawn.getIsCrowned()) {
+                            newPositions.add((byte) 1);
+                        }
+                        else if (currentPawn.getIsCrowned()) {
+                            newPositions.add((byte) 2);
+                        }
+                    }
+                    if (currentPawn.getColor() == Color.white) {
+                        if (!currentPawn.getIsCrowned()) {
+                            newPositions.add((byte) 3);
+                        }
+                        else if (currentPawn.getIsCrowned()) {
+                            newPositions.add((byte) 4);
+                        }
+                    }
+                }
+            }
+        }
+        positions.add(newPositions);
+    }
+
     private boolean isValidCoordinateFormat(String position) {
         Pattern pattern = Pattern.compile("[a-zA-Z]\\d+");
         Matcher matcher = pattern.matcher(position);
-        boolean result = matcher.matches();
-        return result;
+        return matcher.matches();
     }
 
     private boolean isValidInput(String position) {

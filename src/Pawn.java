@@ -42,7 +42,6 @@ public class Pawn {
         return enemyNextCoordinate;
     }
     // validation
-
     public boolean isValidMove(int[] endPosition, Pawn[][] board) {
         if (!this.getIsCrowned()) {
             return notCrownedPawnValidation(endPosition, board);
@@ -55,7 +54,7 @@ public class Pawn {
         int startCol = this.position.y;
         int endRow = endPosition[0];
         int endCol = endPosition[1];
-        boolean isNextField = (this.getColor() == Color.white && startRow - endRow == 1) || (this.getColor() == Color.black && startRow - endRow == -1);
+        boolean isNextField = (this.color.equals(Color.white ) && startRow - endRow == 1) || (this.color.equals(Color.black) && startRow - endRow == -1);
         boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
         if (isNextField) {
             if (Math.abs(startCol - endCol) == 1) {
