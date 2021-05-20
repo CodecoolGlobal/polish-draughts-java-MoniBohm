@@ -53,7 +53,57 @@ public class Pawn {
     }
 
     private boolean moveMentWithCrownedPawn(int[] endPosition, Pawn[][] board) {
-        return false;
+        int startRow = this.position.x;
+        int startCol = this.position.y;
+        int endRow = endPosition[0];
+        int endCol = endPosition[1];
+        int[][] routes = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        int[] route = {endRow - startRow, endCol - startCol};
+        int distance = Math.abs(endRow - startRow);
+        int [] currentRoute = new int[2];
+        if ((Math.abs(endRow - startRow)) == (Math.abs(endCol - startCol))) {
+            if (route[0] > 0 && route[1] > 0) {
+                currentRoute[0] = routes[0][0];
+                currentRoute[1] = routes[0][1];
+            }
+            else if (route[0] > 0 && route[1] < 0) {
+                currentRoute[0] = routes[1][0];
+                currentRoute[1] = routes[1][1];
+            }
+            else if (route[0] < 0 && route[1] > 0) {
+                currentRoute[0] = routes[2][0];
+                currentRoute[1] = routes[2][1];
+            }
+            else if (route[0] < 0 && route[1] < 0) {
+                currentRoute[0] = routes[3][0];
+                currentRoute[0] = routes[3][1];
+
+            }
+        }
+        for (int i = 0; i <= distance; i++) {
+            int currentRow = startRow + (currentRoute[0] * i);
+            int currentCol = startCol + (currentRoute[1] * i);
+            if ((board[currentRow][currentCol] != null) && (board[currentRow][currentCol].getColor() != this.color)) {
+                if (board[currentRoute[0] * (i+1)][currentRoute[0] * (i+1)] != null) {
+                    return false;
+                }
+            }
+
+        }
+
+
+        /*boolean isNextField = (this.color.equals(Color.white ) && startRow - endRow == 1) || (this.color.equals(Color.black) && startRow - endRow == -1);
+        boolean isFurtherField = (Math.abs(startRow - endRow) == 2);
+        if (isNextField) {
+            if (Math.abs(startCol - endCol) == 1) {
+                return true;
+            }
+        }
+        if(isFurtherField){
+            return isEnemyInTheMiddle(board, startRow, endRow, startCol, endCol);
+        }
+        return  false;*/
+        return true;
     }
 
     private boolean notCrownedPawnValidation(int[] endPosition, Pawn[][] board) {
