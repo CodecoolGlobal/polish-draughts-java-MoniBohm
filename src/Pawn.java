@@ -79,6 +79,9 @@ public class Pawn {
                 if ((board[currentRow + currentRoute[0]][currentCol + currentRoute[1]]) != null) {
                     return false;
                 }
+                else {
+                    board[currentRow][currentCol] = null;
+                }
             }
             else if ((i != 0) && board[currentRow][currentCol] != null && board[currentRow][currentCol].getColor() == this.color) {
                 return false;
