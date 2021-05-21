@@ -19,7 +19,7 @@ public class Board {
         Color color = determinePawnColor(row, n);
 
         if ((col + row) % 2 == 0 && (row > n / 2 || row < n / 2 - 1)) {
-            Pawn.Coordinates position = new Pawn.Coordinates(row, col);
+            Coordinates position = new Coordinates(row, col);
             fields[row][col] = new Pawn(color, position, false);
         } else {
             fields[row][col] = null;
@@ -52,7 +52,7 @@ public class Board {
         printBoardForAutomaticJump();
         Color color = pawn.getColor();
         boolean isCrowned = pawn.getIsCrowned();
-        Pawn.Coordinates position = new Pawn.Coordinates(endPosition[0], endPosition[1]);
+        Coordinates position = new Coordinates(endPosition[0], endPosition[1]);
         removePawn(pawn);
         boolean newQueen = (endPosition[0]==fields.length-1 && color == Color.black) || (endPosition[0]==0 && color == Color.white);
         if(newQueen){
@@ -62,9 +62,6 @@ public class Board {
         }
         if(!pawn.getIsCrowned()){
         getEnemyPosition(pawn, endPosition);}
-        else {
-
-        }
     }
 
     private void getEnemyPosition(Pawn pawn, int[] endPosition) throws InterruptedException {

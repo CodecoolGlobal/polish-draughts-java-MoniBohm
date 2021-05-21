@@ -11,16 +11,6 @@ public class Pawn {
         this.isCrowned = isCrowned;
     }
 
-    public static class Coordinates {
-        int x;
-        int y;
-
-        Coordinates(int row, int col) {
-            this.x = row;
-            this.y = col;
-        }
-    }
-    //getInformation about Pawn
     public Color getColor() {
         return this.color;
     }
